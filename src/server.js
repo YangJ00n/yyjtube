@@ -5,14 +5,16 @@ const PORT = 4000;
 // create express application
 const app = express();
 
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+};
+
 const handleHome = (req, res) => {
-  return res.send("<h1>Home!</h1>");
+  return res.send("I love middlewares");
 };
-const handleLogin = (req, res) => {
-  return res.send({ message: "Login here." });
-};
-app.get("/", handleHome);
-app.get("/login", handleLogin);
+
+app.get("/", logger, handleHome);
 
 // listening
 const handleListening = () =>
