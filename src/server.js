@@ -1,5 +1,8 @@
 import express from "express";
 import morgan from "morgan";
+import globerRouter from "./routers/globalRouter";
+import videoRouter from "./routers/videoRouter";
+import userRouter from "./routers/userRouter";
 
 const PORT = 4000;
 
@@ -9,11 +12,9 @@ const app = express();
 const logger = morgan("dev"); // morgan return middleware
 app.use(logger);
 
-const handleHome = (req, res) => {
-  return res.send("I love middlewares");
-};
-
-app.get("/", handleHome);
+app.use("/", globerRouter);
+app.use("/videos", videoRouter);
+app.use("/users", userRouter);
 
 // listening
 const handleListening = () =>
