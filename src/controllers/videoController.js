@@ -1,7 +1,7 @@
 import Video from "../models/Video";
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}); // database에서 결과값을 받을 때까지 js는 이 라인에서 계속 기다림 -> 순서대로 실행됨
+  const videos = await Video.find({}).sort({ createdAt: "desc" }); // asc:오래된순, desc:최신순
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -57,4 +57,23 @@ export const postUpload = async (req, res) => {
       errorMessage: error._message,
     });
   }
+};
+
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params;
+  await Video.findByIdAndDelete(id);
+  return res.redirect("/");
+};
+
+export const search = async (req, res) => {
+  const { keyword } = req.query;
+  let videos = [];
+  if (keyword) {
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(keyword, "i"),
+      },
+    });
+  }
+  return res.render("search", { pageTitle: "Search", videos });
 };
