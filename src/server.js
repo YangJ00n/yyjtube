@@ -20,10 +20,13 @@ app.use(express.urlencoded({ extended: true })); // form의 value들을 이해�
 
 app.use(
   session({
-    secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/wetube" }),
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false, // 세션을 수정할 때만 세션을 DB에 저장 -> 로그인한 사용자에게만 쿠키를 준다.
+    // cookie: {
+    //   maxAge: 20000, // 쿠키 만료 시간 설정 (밀리세컨드)
+    // },
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
 
