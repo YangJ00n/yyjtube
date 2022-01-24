@@ -13,6 +13,8 @@ html(lang="ko")
                     //- pug파일에서 res.locas에 접근할 수 있다.
                     if loggedIn
                         li 
+                            a(href="/videos/upload") Upload Video
+                        li 
                             a(href="/users/edit") Edit Profile
                         li 
                             a(href="/users/logout") Log Out 
@@ -23,8 +25,6 @@ html(lang="ko")
                             a(href="/login") Login
                     li 
                         a(href="/search") Search
-                    li 
-                        a(href="/videos/upload") Upload Video
         main 
             block content 
         include partials/footer

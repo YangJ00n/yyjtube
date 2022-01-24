@@ -142,10 +142,47 @@ export const logout = (req, res) => {
   return res.redirect("/");
 };
 
-export const getEdit = (req, res) => {
-  return res.render("edit-profile", { pageTitle: "Edit Profile" });
-};
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
+export const getEdit = (req, res) =>
+  res.render("edit-profile", { pageTitle: "Edit Profile" });
+export const postEdit = async (req, res) => {
+  // const id = req.session.user.id;
+  // const { name, email, username, location } = req.body;
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+
+  // username과 email을 다른 사용자가 사용하고 있는지 확인 (my code ⬇️)
+  const pageTitle = "Edit Profile";
+  const findUsername = await User.findOne({ username });
+  if (findUsername._id != _id) {
+    return res.render("edit-profile", {
+      pageTitle,
+      errorMessage: `${username} is an existing username.`,
+    });
+  }
+  const findEmail = await User.findOne({ email });
+  if (findEmail._id != _id) {
+    return res.render("edit-profile", {
+      pageTitle,
+      errorMessage: `${email} is an existing email.`,
+    });
+  }
+
+  // 사용자 정보 업데이트
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+  return res.redirect("/users/edit");
 };
 export const see = (req, res) => res.send("See User");
