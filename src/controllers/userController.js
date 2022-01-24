@@ -6,12 +6,16 @@ export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
   const { name, email, username, password, password2, location } = req.body;
   const pageTitle = "Join";
+
+  // 비밀번호와 비밀번호 확인이 일치하는지 확인
   if (password !== password2) {
     return res.status(400).render("join", {
       pageTitle,
       errorMessage: "Password confirmation does not match.",
     });
   }
+
+  // username 또는 email이 존재하는지 확인
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
     return res.status(400).render("join", {
@@ -19,6 +23,8 @@ export const postJoin = async (req, res) => {
       errorMessage: "This username/email is already taken.",
     });
   }
+
+  // 사용자 생성
   try {
     await User.create({
       name,
@@ -42,12 +48,16 @@ export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const pageTitle = "Login";
   const user = await User.findOne({ username, socialOnly: false });
+
+  // 존재하는 사용자인지 확인
   if (!user) {
     return res.status(400).render("login", {
       pageTitle,
       errorMessage: "An account with this username does not exists.",
     });
   }
+
+  // 비밀번호가 일치하는지 확인
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
     return res.status(400).render("login", {
@@ -55,6 +65,7 @@ export const postLogin = async (req, res) => {
       errorMessage: "Wrong password",
     });
   }
+
   // session에 정보 추가
   req.session.loggedIn = true;
   req.session.user = user;
@@ -91,6 +102,7 @@ export const finishGithubLogin = async (req, res) => {
       },
     })
   ).json();
+
   if ("access_token" in tokenRequest) {
     // access_token을 가지고 Github API를 이용해서 유저의 정보를 가져옴
     const { access_token } = tokenRequest;
@@ -103,6 +115,8 @@ export const finishGithubLogin = async (req, res) => {
       })
     ).json();
     // console.log(userData);
+
+    // email이 private일 경우도 있기 때문에 access_token을 가지고 Github API를 이용해서 이메일 가져옴
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
@@ -110,12 +124,15 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
+
+    // primary와 verified가 true인 이메일이 있는지 확인
     const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
     if (!emailObj) {
       return res.redirect("/login");
     }
+
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
       // DB에 해당 email을 가진 사용자가 없을 경우 -> Join
@@ -129,8 +146,11 @@ export const finishGithubLogin = async (req, res) => {
         location: userData.location,
       });
     }
+
+    // session에 정보 추가
     req.session.loggedIn = true;
     req.session.user = user;
+
     return res.redirect("/");
   } else {
     return res.redirect("/login");
@@ -182,7 +202,52 @@ export const postEdit = async (req, res) => {
     },
     { new: true }
   );
+
+  // session에 정보 업데이트
   req.session.user = updatedUser;
+
   return res.redirect("/users/edit");
 };
+
+export const getChangePassword = (req, res) => {
+  // social 로그인한 경우에는 접근 불가
+  if (req.session.user.socialOnly) {
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPasswordConfirmation },
+  } = req;
+  const pageTitle = "Change Password";
+  const user = await User.findById(_id);
+
+  // 현재 비밀번호가 DB에 있는 비밀번호와 일치하는지 확인
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res.status(400).render("users/change-password", {
+      pageTitle,
+      errorMessage: "The current password is incorrect.",
+    });
+  }
+
+  // 새 비밀번호와 새 비밀번호 확인이 일치하는지 확인
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("users/change-password", {
+      pageTitle,
+      errorMessage: "The password doex not match the confirmation.",
+    });
+  }
+
+  // 비밀번호 변경
+  user.password = newPassword;
+  await user.save(); // pre save가 작동됨
+
+  return res.redirect("/users/logout");
+};
+
 export const see = (req, res) => res.send("See User");
