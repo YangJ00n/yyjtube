@@ -169,10 +169,12 @@ export const postEdit = async (req, res) => {
   // const { name, email, username, location } = req.body;
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req;
+  // console.log(file);
 
   // username과 email을 다른 사용자가 사용하고 있는지 확인 (my code ⬇️)
   const pageTitle = "Edit Profile";
@@ -195,6 +197,7 @@ export const postEdit = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
       name,
       email,
       username,

@@ -9,12 +9,20 @@ import {
   getChangePassword,
   postChangePassword,
 } from "../controllers/userController";
-import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
+import {
+  protectorMiddleware,
+  publicOnlyMiddleware,
+  uploadFiles,
+} from "../middlewares";
 
 const userRouter = express.Router();
 
 userRouter.get("/logout", protectorMiddleware, logout);
-userRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(postEdit);
+userRouter
+  .route("/edit")
+  .all(protectorMiddleware)
+  .get(getEdit)
+  .post(uploadFiles.single("avatar"), postEdit); // input name이 avatar인 파일을 찾아서 저장 후 그 파일에 대한 정보를 postEdit으로 넘겨준다.
 userRouter
   .route("/change-password")
   .all(protectorMiddleware)

@@ -1,3 +1,5 @@
+import multer from "multer";
+
 export const localsMiddleware = (req, res, next) => {
   // pug파일에서 res.locas에 접근할 수 있다.
   res.locals.loggedIn = Boolean(req.session.loggedIn);
@@ -23,3 +25,6 @@ export const publicOnlyMiddleware = (req, res, next) => {
     return res.redirect("/");
   }
 };
+
+// form에서 파일을 받아서 uploads 폴더에 저장하고 다음 controller에게 파일에 대한 정보(req.file)를 넘겨주는 middleware
+export const uploadFiles = multer({ dest: "uploads/" });
