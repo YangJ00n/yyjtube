@@ -1,3 +1,4 @@
+import req from "express/lib/request";
 import Video from "../models/Video";
 
 export const home = async (req, res) => {
@@ -37,15 +38,18 @@ export const postEdit = async (req, res) => {
   return res.redirect(`/videos/${id}`);
 };
 
-export const getUpload = (req, res) => {
-  return res.render("upload", { pageTitle: "Upload Video" });
-};
+export const getUpload = (req, res) =>
+  res.render("upload", { pageTitle: "Upload Video" });
 export const postUpload = async (req, res) => {
-  const { title, description, hashtags } = req.body;
+  const {
+    body: { title, description, hashtags },
+    file: { path: fileUrl },
+  } = req;
   try {
     await Video.create({
       title,
       description,
+      fileUrl,
       hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");

@@ -26,5 +26,16 @@ export const publicOnlyMiddleware = (req, res, next) => {
   }
 };
 
-// form에서 파일을 받아서 uploads 폴더에 저장하고 다음 controller에게 파일에 대한 정보(req.file)를 넘겨주는 middleware
-export const uploadFiles = multer({ dest: "uploads/" });
+// form에서 파일을 받아서 지정한 폴더에 저장하고 다음 controller에게 파일에 대한 정보(req.file)를 넘겨주는 middleware
+export const avatarUpload = multer({
+  dest: "uploads/avatars/",
+  limits: {
+    fileSize: 3000000, // 파일 최대 사이즈 설정 (단위 Byte)
+  },
+});
+export const videoUpload = multer({
+  dest: "uploads/videos/",
+  limits: {
+    fileSize: 10000000,
+  },
+});
