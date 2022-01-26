@@ -1,4 +1,4 @@
-import req from "express/lib/request";
+import User from "../models/User";
 import Video from "../models/Video";
 
 export const home = async (req, res) => {
@@ -8,7 +8,9 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id);
+  // populate("owner") -> owner의 ObjectId를 실제 데이터로 변환한다.
+  const video = await Video.findById(id).populate("owner");
+  // console.log(video);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
@@ -42,16 +44,25 @@ export const getUpload = (req, res) =>
   res.render("upload", { pageTitle: "Upload Video" });
 export const postUpload = async (req, res) => {
   const {
+    session: {
+      user: { _id },
+    },
     body: { title, description, hashtags },
     file: { path: fileUrl },
   } = req;
   try {
-    await Video.create({
+    const newVideo = await Video.create({
       title,
       description,
       fileUrl,
+      owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
+
+    const user = await User.findById(_id);
+    user.videos.unshift(newVideo._id);
+    user.save();
+
     return res.redirect("/");
   } catch (error) {
     console.log(error);
