@@ -32,6 +32,7 @@ app.use(
 
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads")); // static files serving 활성화 -> 브라우저가 uploads 폴더에 접근할 수 있도록 한다.
+app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
