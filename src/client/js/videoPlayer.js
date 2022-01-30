@@ -1,24 +1,38 @@
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
+const playBtnIcon = playBtn.querySelector("i");
 const muteBtn = document.getElementById("mute");
+const muteBtnIcon = muteBtn.querySelector("i");
 const volumeRange = document.getElementById("volume");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const timeline = document.getElementById("timeline");
+const fullScreenBtn = document.getElementById("fullScreen");
+const fullScreenIcon = fullScreenBtn.querySelector("i");
+const videoContainer = document.getElementById("videoContainer");
+const videoControls = document.getElementById("videoControls");
 
-let volumeValue = 0.5;
-video.volume = volumeValue;
-
+let controlsTimeout = null;
+video.volume = 0.5;
 // is video paused before timeline change.
 let isVideoPausedBefore;
 let isTimelineSetEnd = true;
 
 const handlePlay = () => {
-  playBtn.innerText = "Pause";
+  playBtnIcon.classList = "fas fa-pause";
 };
 
 const handlePause = () => {
-  playBtn.innerText = "Play";
+  playBtnIcon.classList = "fas fa-play";
+};
+
+const handleVolume = () => {
+  if (!video.muted) {
+    muteBtnIcon.classList =
+      video.volume < 0.5 ? "fas fa-volume-down" : "fas fa-volume-up";
+  } else {
+    muteBtnIcon.classList = "fas fa-volume-mute";
+  }
 };
 
 const handlePlayClick = () => {
@@ -27,18 +41,16 @@ const handlePlayClick = () => {
   } else {
     video.pause();
   }
-  // playBtn.innerText = video.paused ? "Play" : "Pause";
 };
 
 const handleMute = () => {
-  if (volumeValue !== 0) {
+  if (video.volume !== 0) {
     if (video.muted) {
       video.muted = false;
     } else {
       video.muted = true;
     }
-    muteBtn.innerText = video.muted ? "Unmute" : "Mute";
-    volumeRange.value = video.muted ? 0 : volumeValue;
+    volumeRange.value = video.muted ? 0 : video.volume;
   }
 };
 
@@ -47,15 +59,12 @@ const handleVolumeChange = (event) => {
     target: { value },
   } = event;
 
-  volumeValue = Number(value);
-  video.volume = volumeValue;
+  video.volume = Number(value);
 
   if (video.muted) {
     video.muted = false;
-    muteBtn.innerText = "Mute";
-  } else if (!video.muted && volumeValue === 0) {
+  } else if (!video.muted && video.volume === 0) {
     video.muted = true;
-    muteBtn.innerText = "Unmute";
   }
 };
 
@@ -64,7 +73,7 @@ const formatTime = (seconds) => {
   return new Date(seconds * 1000).toISOString().substring(startIdx, 19);
 };
 
-const handleLoadedMetadata = () => {
+const handleLoadedData = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
   timeline.max = Math.floor(video.duration);
 };
@@ -93,13 +102,38 @@ const handleTimelineSet = () => {
   isTimelineSetEnd = true;
 };
 
+const handleFullscreen = () => {
+  const fullscreen = document.fullscreenElement;
+  if (fullscreen) {
+    document.exitFullscreen();
+    fullScreenIcon.classList = "fas fa-expand";
+  } else {
+    videoContainer.requestFullscreen();
+    fullScreenIcon.classList = "fas fa-compress";
+  }
+};
+
+const handleMouseMove = () => {
+  if (controlsTimeout) {
+    clearTimeout(controlsTimeout);
+    controlsTimeout = null;
+  }
+  videoControls.classList.add("showing");
+  controlsTimeout = setTimeout(() => {
+    videoControls.classList.remove("showing");
+  }, 1000);
+};
+
 video.addEventListener("play", handlePlay);
 video.addEventListener("pause", handlePause);
+video.addEventListener("volumechange", handleVolume);
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange);
-video.addEventListener("loadedmetadata", handleLoadedMetadata);
+video.addEventListener("loadeddata", handleLoadedData);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
 timeline.addEventListener("change", handleTimelineSet);
+fullScreenBtn.addEventListener("click", handleFullscreen);
+videoContainer.addEventListener("mousemove", handleMouseMove);
