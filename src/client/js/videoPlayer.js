@@ -11,6 +11,7 @@ const fullScreenBtn = document.getElementById("fullScreen");
 const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
+const playbackRate = document.getElementById("playbackRate");
 
 let controlsTimeout = null;
 video.volume = 0.5;
@@ -27,12 +28,13 @@ const handlePause = () => {
 };
 
 const handleVolume = () => {
-  if (!video.muted) {
+  if (video.muted || video.volume === 0) {
+    muteBtnIcon.classList = "fas fa-volume-mute";
+  } else {
     muteBtnIcon.classList =
       video.volume < 0.5 ? "fas fa-volume-down" : "fas fa-volume-up";
-  } else {
-    muteBtnIcon.classList = "fas fa-volume-mute";
   }
+  volumeRange.value = video.muted ? 0 : video.volume;
 };
 
 const handlePlayClick = () => {
@@ -43,14 +45,13 @@ const handlePlayClick = () => {
   }
 };
 
-const handleMute = () => {
+const handleMuteClick = () => {
   if (video.volume !== 0) {
     if (video.muted) {
       video.muted = false;
     } else {
       video.muted = true;
     }
-    volumeRange.value = video.muted ? 0 : video.volume;
   }
 };
 
@@ -113,15 +114,70 @@ const handleFullscreen = () => {
   }
 };
 
-const handleMouseMove = () => {
+const showControls = () => {
   if (controlsTimeout) {
     clearTimeout(controlsTimeout);
     controlsTimeout = null;
   }
   videoControls.classList.add("showing");
+  videoContainer.classList.remove("hideCursor");
+};
+
+const hideControls = () => videoControls.classList.remove("showing");
+
+const hideControlsTimeout = () => {
   controlsTimeout = setTimeout(() => {
-    videoControls.classList.remove("showing");
-  }, 1000);
+    hideControls();
+    videoContainer.classList.add("hideCursor");
+  }, 3000);
+};
+
+const handleMouseMove = () => {
+  showControls();
+  hideControlsTimeout();
+};
+
+const handleMouseLeave = () => {
+  hideControls();
+};
+
+const handleMouseEnterControls = () => {
+  showControls();
+};
+
+const handleKeyControls = (key) => {
+  if (key === "Space" || key === "KeyK") handlePlayClick();
+  else if (key === "KeyM") handleMuteClick();
+  else if (key === "KeyF") handleFullscreen();
+  else if (key === "ArrowRight") video.currentTime += 5;
+  else if (key === "ArrowLeft") video.currentTime -= 5;
+  else if (key === "KeyL") video.currentTime += 10;
+  else if (key === "KeyJ") video.currentTime -= 10;
+  else if (key === "ArrowUp")
+    video.volume = +(video.volume > 0.9 ? 1 : video.volume + 0.1).toFixed(1);
+  else if (key === "ArrowDown")
+    video.volume = +(video.volume < 0.1 ? 0 : video.volume - 0.1).toFixed(1);
+
+  showControls();
+  hideControlsTimeout();
+};
+
+const handleKeydown = (event) => {
+  const { code } = event;
+  // console.log(code);
+  const preventEventKeyList = [
+    "Space",
+    "ArrowRight",
+    "ArrowLeft",
+    "ArrowUp",
+    "ArrowDown",
+  ];
+  if (preventEventKeyList.indexOf(code) !== -1) event.preventDefault();
+  handleKeyControls(code);
+};
+
+const handlePlaybackRate = () => {
+  video.playbackRate = playbackRate.value;
 };
 
 video.addEventListener("play", handlePlay);
@@ -129,11 +185,17 @@ video.addEventListener("pause", handlePause);
 video.addEventListener("volumechange", handleVolume);
 
 playBtn.addEventListener("click", handlePlayClick);
-muteBtn.addEventListener("click", handleMute);
+video.addEventListener("click", handlePlayClick);
+muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadeddata", handleLoadedData);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
 timeline.addEventListener("change", handleTimelineSet);
 fullScreenBtn.addEventListener("click", handleFullscreen);
-videoContainer.addEventListener("mousemove", handleMouseMove);
+video.addEventListener("dblclick", handleFullscreen);
+video.addEventListener("mousemove", handleMouseMove);
+videoContainer.addEventListener("mouseleave", handleMouseLeave);
+videoControls.addEventListener("mouseenter", handleMouseEnterControls);
+window.addEventListener("keydown", handleKeydown);
+playbackRate.addEventListener("change", handlePlaybackRate);
