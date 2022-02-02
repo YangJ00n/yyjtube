@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     main: "./src/client/js/main.js",
     videoPlayer: "./src/client/js/videoPlayer.js",
+    recorder: "./src/client/js/recorder.js",
   },
   mode: "development",
   watch: true, // 파일을 감시(watch)하고 변경될 때마다 다시 build 한다.
