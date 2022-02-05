@@ -58,8 +58,13 @@ export const postEdit = async (req, res) => {
   return res.redirect(`/videos/${id}`);
 };
 
-export const getUpload = (req, res) =>
+export const getUpload = (req, res) => {
+  // ffmpeg 에러 : Uncaught (in promise) ReferenceError: SharedArrayBuffer is not defined 을 해결하기 위한 코드
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+
   res.render("upload", { pageTitle: "Upload Video" });
+};
 export const postUpload = async (req, res) => {
   const {
     session: {
