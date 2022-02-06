@@ -1,49 +1,98 @@
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 
-const startBtn = document.getElementById("startBtn");
+const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
 
 let stream;
 let recorder;
 let videoFile;
 
+let mp4Url;
+let thumbUrl;
+
+const files = {
+  input: "recording.webm",
+  output: "output.mp4",
+  thumb: "thumbnail.jpg",
+};
+
+const downloadFile = (fileUrl, fileName) => {
+  const a = document.createElement("a");
+  a.href = fileUrl;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+};
+
+const downloadFiles = () => {
+  downloadFile(mp4Url, "MyRecording.mp4");
+  downloadFile(thumbUrl, "MyThumbnail.jpg");
+};
+
 const handleDownload = async () => {
+  actionBtn.removeEventListener("click", handleDownload);
+  actionBtn.innerText = "Transcoding...";
+  actionBtn.disabled = true;
+
   const ffmpeg = createFFmpeg({
     log: true,
     corePath: "/static/ffmpeg-core.js",
   });
   await ffmpeg.load();
 
-  ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile));
-  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+  ffmpeg.FS("writeFile", files.input, await fetchFile(videoFile));
 
-  const mp4File = ffmpeg.FS("readFile", "output.mp4");
+  // webm을 mp4로 변환
+  await ffmpeg.run("-i", files.input, "-r", "60", files.output);
 
-  // console.log(mp4File);
-  // console.log(mp4File.buffer);
+  // 00:00:01 시간대를 찾고 1장의 스크린샷을 찍는다.
+  await ffmpeg.run(
+    "-i",
+    files.input,
+    "-ss",
+    "00:00:01",
+    "-frames:v",
+    "1",
+    files.thumb
+  );
+
+  const mp4File = ffmpeg.FS("readFile", files.output);
+  const thumbFile = ffmpeg.FS("readFile", files.thumb);
 
   const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
-  const mp4Url = URL.createObjectURL(mp4Blob);
+  const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
 
-  const a = document.createElement("a");
-  a.href = mp4Url;
-  a.download = "MyRecording.mp4";
-  document.body.appendChild(a);
-  a.click();
+  mp4Url = URL.createObjectURL(mp4Blob);
+  thumbUrl = URL.createObjectURL(thumbBlob);
+
+  downloadFiles();
+
+  // 브라우저가 느려지는 것을 방지하기 위해 파일의 링크를 제거한다.
+  ffmpeg.FS("unlink", files.input);
+  ffmpeg.FS("unlink", files.output);
+  ffmpeg.FS("unlink", files.thumb);
+
+  URL.revokeObjectURL(videoFile);
+  // URL.revokeObjectURL(mp4Url);
+  // URL.revokeObjectURL(thumbUrl);
+
+  actionBtn.addEventListener("click", downloadFiles);
+  actionBtn.innerText = "Download Recording";
+  actionBtn.disabled = false;
 };
 
 const handleStop = () => {
-  startBtn.innerText = "Download Recording";
-  startBtn.removeEventListener("click", handleStop);
-  startBtn.addEventListener("click", handleDownload);
+  actionBtn.innerText = "Download Recording";
+  actionBtn.removeEventListener("click", handleStop);
+  actionBtn.addEventListener("click", handleDownload);
 
   recorder.stop();
 };
 
 const handleStart = () => {
-  startBtn.innerText = "Stop Recording";
-  startBtn.removeEventListener("click", handleStart);
-  startBtn.addEventListener("click", handleStop);
+  actionBtn.innerText = "Stop Recording";
+  actionBtn.removeEventListener("click", handleStart);
+  actionBtn.addEventListener("click", handleStop);
 
   recorder = new MediaRecorder(stream);
   recorder.ondataavailable = (event) => {
@@ -71,4 +120,4 @@ const init = async () => {
 
 init();
 
-startBtn.addEventListener("click", handleStart);
+actionBtn.addEventListener("click", handleStart);
