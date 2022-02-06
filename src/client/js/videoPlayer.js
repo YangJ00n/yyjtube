@@ -14,17 +14,21 @@ const videoControls = document.getElementById("videoControls");
 const playbackRate = document.getElementById("playbackRate");
 
 let controlsTimeout = null;
-video.volume = 0.5;
-// is video paused before timeline change.
-let isVideoPausedBefore;
+let isVideoPausedBefore; // is video paused before timeline change.
 let isTimelineSetEnd = true;
 
 const handlePlay = () => {
   playBtnIcon.classList = "fas fa-pause";
+  hideControlsTimeout();
+  video.addEventListener("mousemove", handleMouseMove);
+  videoContainer.addEventListener("mouseleave", handleMouseLeave);
 };
 
 const handlePause = () => {
   playBtnIcon.classList = "fas fa-play";
+  showControls();
+  video.removeEventListener("mousemove", handleMouseMove);
+  videoContainer.removeEventListener("mouseleave", handleMouseLeave);
 };
 
 const handleVolume = () => {
@@ -35,6 +39,7 @@ const handleVolume = () => {
       video.volume < 0.5 ? "fas fa-volume-down" : "fas fa-volume-up";
   }
   volumeRange.value = video.muted ? 0 : video.volume;
+  localStorage.setItem("volume", video.muted ? 0 : video.volume);
 };
 
 const handlePlayClick = () => {
@@ -47,11 +52,7 @@ const handlePlayClick = () => {
 
 const handleMuteClick = () => {
   if (video.volume !== 0) {
-    if (video.muted) {
-      video.muted = false;
-    } else {
-      video.muted = true;
-    }
+    video.muted = !video.muted;
   }
 };
 
@@ -81,7 +82,7 @@ const handleLoadedMetadata = () => {
 
 const handleTimeUpdate = () => {
   currentTime.innerText = formatTime(Math.floor(video.currentTime));
-  timeline.value = Math.floor(video.currentTime);
+  timeline.value = video.currentTime;
 };
 
 const handleTimelineChange = (event) => {
@@ -98,7 +99,6 @@ const handleTimelineChange = (event) => {
 };
 
 const handleTimelineSet = () => {
-  console.log(isVideoPausedBefore);
   if (!isVideoPausedBefore) video.play();
   isTimelineSetEnd = true;
 };
@@ -146,6 +146,11 @@ const handleMouseEnterControls = () => {
 };
 
 const handleKeyControls = (key) => {
+  if (!video.paused) {
+    showControls();
+    hideControlsTimeout();
+  }
+
   if (key === "Space" || key === "KeyK") handlePlayClick();
   else if (key === "KeyM") handleMuteClick();
   else if (key === "KeyF") handleFullscreen();
@@ -157,9 +162,6 @@ const handleKeyControls = (key) => {
     video.volume = +(video.volume > 0.9 ? 1 : video.volume + 0.1).toFixed(1);
   else if (key === "ArrowDown")
     video.volume = +(video.volume < 0.1 ? 0 : video.volume - 0.1).toFixed(1);
-
-  showControls();
-  hideControlsTimeout();
 };
 
 const handleKeydown = (event) => {
@@ -187,6 +189,13 @@ const handleEnded = () => {
   });
 };
 
+const setVolume = () => {
+  const volume = localStorage.getItem("volume");
+  video.volume = volume ? volume : 0.5;
+};
+
+setVolume();
+
 video.addEventListener("play", handlePlay);
 video.addEventListener("pause", handlePause);
 video.addEventListener("volumechange", handleVolume);
@@ -202,8 +211,6 @@ timeline.addEventListener("input", handleTimelineChange);
 timeline.addEventListener("change", handleTimelineSet);
 fullScreenBtn.addEventListener("click", handleFullscreen);
 video.addEventListener("dblclick", handleFullscreen);
-video.addEventListener("mousemove", handleMouseMove);
-videoContainer.addEventListener("mouseleave", handleMouseLeave);
 videoControls.addEventListener("mouseenter", handleMouseEnterControls);
 window.addEventListener("keydown", handleKeydown);
 playbackRate.addEventListener("change", handlePlaybackRate);

@@ -2,6 +2,8 @@ import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 
 const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
+const micBtn = document.getElementById("mic");
+const micIcon = micBtn.querySelector("i");
 
 let stream;
 let recorder;
@@ -9,6 +11,8 @@ let videoFile;
 
 let mp4Url;
 let thumbUrl;
+
+let isMicOn = false;
 
 const files = {
   input: "recording.webm",
@@ -89,10 +93,15 @@ const handleStop = () => {
   recorder.stop();
 };
 
-const handleStart = () => {
+const handleStart = async () => {
+  if (isMicOn) await _getUserMedia();
+
+  micBtn.classList.add("none");
   actionBtn.innerText = "Stop Recording";
   actionBtn.removeEventListener("click", handleStart);
-  actionBtn.addEventListener("click", handleStop);
+  setTimeout(() => {
+    actionBtn.addEventListener("click", handleStop);
+  }, 1000);
 
   recorder = new MediaRecorder(stream);
   recorder.ondataavailable = (event) => {
@@ -108,16 +117,33 @@ const handleStart = () => {
   recorder.start();
 };
 
-const init = async () => {
-  stream = await navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: true,
-  });
-  //   console.log(stream);
-  video.srcObject = stream;
-  video.play();
+const handleMic = () => {
+  isMicOn = !isMicOn;
+  micIcon.classList = isMicOn ? "fas fa-microphone" : "fas fa-microphone-slash";
 };
 
-init();
+const _getUserMedia = async () => {
+  stream = await navigator.mediaDevices.getUserMedia({
+    audio: isMicOn,
+    video: {
+      width: 1024,
+      height: 576,
+    },
+  });
+};
 
-actionBtn.addEventListener("click", handleStart);
+const init = async () => {
+  actionBtn.removeEventListener("click", init);
+
+  await _getUserMedia();
+  video.srcObject = stream;
+  video.play();
+
+  video.classList.remove("none");
+  micBtn.classList.remove("none");
+  actionBtn.innerText = "Start Recording";
+  actionBtn.addEventListener("click", handleStart);
+};
+
+actionBtn.addEventListener("click", init);
+micBtn.addEventListener("click", handleMic);
