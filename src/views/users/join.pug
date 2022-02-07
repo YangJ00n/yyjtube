@@ -1,4 +1,4 @@
-extends base
+extends ../base
 
 block content
     form(method="POST")
@@ -19,7 +19,7 @@ block content
             input(name="password2", type="password", required, id="password2")
             label(for="password2") Confirm Password
         input(type="submit", value="Join")
-        include partials/social-login
+        include ../partials/social-login
     div.auth-switch
         span Already have an account? 
-        a(href="/login") Log in now &rarr;
+        a(href="login") Log in now &rarr;

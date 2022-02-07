@@ -1,4 +1,4 @@
-extends base
+extends ../base
 
 block content
     div#videoContainer(data-id=video._id)
@@ -30,17 +30,17 @@ block content
                 span#fullScreen
                     i.fas.fa-expand
 
-    //- div 
-    //-     p=video.description
-    //-     small=video.createdAt
-    //- div 
-    //-     small Uploaded by 
-    //-         a(href=`/users/${video.owner._id}`)=video.owner.name
-    //- if String(video.owner._id) === String(loggedInUser._id)
-    //-     br
-    //-     a(href=`${video.id}/edit`) Edit Video &rarr;
-    //-     br
-    //-     a(href=`${video.id}/delete`) Delete Video &rarr;
+    div 
+        p=video.description
+        small=video.createdAt
+    div 
+        small Uploaded by 
+            a(href=`/users/${video.owner._id}`)=video.owner.name
+    if String(video.owner._id) === String(loggedInUser._id)
+        br
+        a(href=`${video.id}/edit`) Edit Video &rarr;
+        br
+        a(href=`${video.id}/delete`) Delete Video &rarr;
 
 block scripts 
     script(src="/static/js/videoPlayer.js") 

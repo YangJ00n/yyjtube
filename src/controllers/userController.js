@@ -2,7 +2,8 @@ import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
-export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
+export const getJoin = (req, res) =>
+  res.render("users/join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
   const { name, email, username, password, password2 } = req.body;
   const pageTitle = "Join";
@@ -10,21 +11,21 @@ export const postJoin = async (req, res) => {
   // 비밀번호와 비밀번호 확인이 일치하는지 확인
   if (password !== password2) {
     req.flash("error", "Password confirmation does not match.");
-    return res.status(400).render("join", { pageTitle });
+    return res.status(400).render("users/join", { pageTitle });
   }
 
   // username이 존재하는지 확인
   const usernameExists = await User.exists({ username });
   if (usernameExists) {
     req.flash("error", "This username is already taken.");
-    return res.status(400).render("join", { pageTitle });
+    return res.status(400).render("users/join", { pageTitle });
   }
 
   // email이 존재하는지 확인
   const emailExists = await User.exists({ email });
   if (emailExists) {
     req.flash("error", "This email is already taken.");
-    return res.status(400).render("join", { pageTitle });
+    return res.status(400).render("users/join", { pageTitle });
   }
 
   // 사용자 생성
@@ -41,12 +42,12 @@ export const postJoin = async (req, res) => {
   } catch (error) {
     console.log(error);
     req.flash("error", "Failed to Join.");
-    return res.status(400).render("join", { pageTitle });
+    return res.status(400).render("users/join", { pageTitle });
   }
 };
 
 export const getLogin = (req, res) =>
-  res.render("login", { pageTitle: "Login" });
+  res.render("users/login", { pageTitle: "Login" });
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const pageTitle = "Login";
@@ -55,14 +56,14 @@ export const postLogin = async (req, res) => {
   // 존재하는 사용자인지 확인
   if (!user) {
     req.flash("error", "This username does not exists.");
-    return res.status(400).render("login", { pageTitle });
+    return res.status(400).render("users/login", { pageTitle });
   }
 
   // 비밀번호가 일치하는지 확인
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
     req.flash("error", "Wrong Password");
-    return res.status(400).render("login", { pageTitle });
+    return res.status(400).render("users/login", { pageTitle });
   }
 
   // session에 정보 추가
@@ -166,7 +167,7 @@ export const logout = (req, res) => {
 };
 
 export const getEdit = (req, res) =>
-  res.render("edit-profile", { pageTitle: "Edit Profile" });
+  res.render("users/edit-profile", { pageTitle: "Edit Profile" });
 export const postEdit = async (req, res) => {
   // const id = req.session.user.id;
   // const { name, email, username } = req.body;
@@ -184,12 +185,12 @@ export const postEdit = async (req, res) => {
   const findUsername = await User.findOne({ username });
   if (findUsername && findUsername._id != _id) {
     req.flash("error", `${username} is an existing username.`);
-    return res.render("edit-profile", { pageTitle });
+    return res.render("users/edit-profile", { pageTitle });
   }
   const findEmail = await User.findOne({ email });
   if (findEmail && findEmail._id != _id) {
     req.flash("error", `${email} is an existing email.`);
-    return res.render("edit-profile", { pageTitle });
+    return res.render("users/edit-profile", { pageTitle });
   }
 
   // 사용자 정보 업데이트
@@ -250,7 +251,7 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/users/edit");
 };
 
-export const see = async (req, res) => {
+export const seeProfile = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate({
     path: "videos",
