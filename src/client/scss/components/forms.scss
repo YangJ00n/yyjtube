@@ -33,7 +33,7 @@ form {
     &:last-child {
       margin-bottom: 0;
     }
-    span {
+    label {
       position: absolute;
       top: 18px;
       left: 20px;
@@ -42,9 +42,9 @@ form {
       font-family: sans-serif;
       color: silver;
     }
-    input:not(input[type="file"]):focus ~ span,
-    input:not(input[type="file"]):valid ~ span,
-    input[type="file"] ~ span {
+    input:not(input[type="file"]):focus ~ label,
+    input:not(input[type="file"]):valid ~ label,
+    input[type="file"] ~ label {
       transform: translateX(-13px) translateY(-35px);
       font-size: 1em;
       color: white;

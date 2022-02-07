@@ -7,27 +7,23 @@ block content
             span#mic.upload__micBtn.none
                 i.fas.fa-microphone-slash
             button#actionBtn.social__btn Record Video
-        if errorMessage
-            span=errorMessage
         form(method="POST", enctype="multipart/form-data")
             h1 Upload Video
-            //- label(for="video") Video File
             div.inputbox
                 input(type="file", accept="video/*", required, id="video", name="video")
-                span Video File
-            //- label(for="thumb") Thumbnail File
+                label(for="video") Video File
             div.inputbox
                 input(type="file", accept="image/*", required, id="thumb", name="thumb")
-                span Thumbnail File
+                label(for="thumb") Thumbnail File
             div.inputbox
-                input(required, type="text", name="title", maxlength=50, autocomplete="off")
-                span Title
+                input(required, type="text", name="title", maxlength=50, autocomplete="off", id="title")
+                label(for="title") Title
             div.inputbox
-                input(required, type="text", name="description", autocomplete="off")
-                span Description
+                input(required, type="text", name="description", autocomplete="off", id="description")
+                label(for="description") Description
             div.inputbox
-                input(required, type="text", name="hashtags", autocomplete="off")
-                span Hashtags (separated by comma)
+                input(required, type="text", name="hashtags", autocomplete="off", id="hashtags")
+                label(for="hashtags") Hashtags (separated by comma)
             input(type="submit", value="Upload Video")
 
 block scripts

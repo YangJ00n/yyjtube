@@ -1,16 +1,14 @@
 extends base
 
 block content
-    if errorMessage
-        span=errorMessage
     form(method="POST")
         h1 Login
         div.inputbox
-            input(name="username", type="text", required, autocomplete="off")
-            span Username
+            input(name="username", type="text", required, autocomplete="off", id="username")
+            label(for="username") Username
         div.inputbox
-            input(name="password", type="password", required)
-            span Password
+            input(name="password", type="password", required, id="password")
+            label(for="password") Password
         input(type="submit", value="Login")
         include partials/social-login
     div.auth-switch

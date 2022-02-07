@@ -3,6 +3,7 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -31,6 +32,7 @@ app.use(
   })
 );
 
+app.use(flash()); // flash middleware는 messages라고 하는 locals를 사용할 수 있게 한다.
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads")); // static files serving 활성화 -> 브라우저가 uploads 폴더에 접근할 수 있도록 한다.
 app.use(

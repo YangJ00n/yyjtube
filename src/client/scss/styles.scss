@@ -41,3 +41,43 @@ main {
 .none {
   display: none;
 }
+
+@keyframes goAway {
+  from {
+    transform: none;
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+
+.message {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: 280px;
+  padding: 10px 20px;
+  border-radius: 10000px;
+  text-align: center;
+  animation: goAway 0.5s ease-in-out forwards;
+  font-weight: bold;
+  &.error {
+    background-color: tomato;
+    color: white;
+    animation-delay: 3s;
+  }
+  &.success {
+    background-color: #78e08f;
+    color: white;
+    animation-delay: 2s;
+  }
+  &.info {
+    background-color: $main;
+    color: white;
+    animation-delay: 1s;
+  }
+}

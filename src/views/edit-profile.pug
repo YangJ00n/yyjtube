@@ -6,16 +6,16 @@ block content
         h1 Edit Profile
         div.inputbox
             input(type="file", id="avatar", name="avatar", accept="image/*")
-            span Avatar
+            label(for="avatar") Avatar
         div.inputbox
-            input(name="name", type="text", required, value=loggedInUser.name, autocomplete="off")
-            span Name
+            input(name="name", type="text", required, value=loggedInUser.name, autocomplete="off", id="name")
+            label(for="name") Name
         div.inputbox
-            input(name="email", type="text", required, value=loggedInUser.email, autocomplete="off")
-            span Email
+            input(name="email", type="text", required, value=loggedInUser.email, autocomplete="off", id="email")
+            label(for="email") Email
         div.inputbox
-            input(name="username", type="text", required, value=loggedInUser.username, autocomplete="off")
-            span Username
+            input(name="username", type="text", required, value=loggedInUser.username, autocomplete="off", id="username")
+            label(for="username") Username
         input(type="submit", value="Update Profile")
         if !loggedInUser.socialOnly
             div.edit-profile__password

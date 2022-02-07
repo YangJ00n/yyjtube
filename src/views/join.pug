@@ -1,25 +1,23 @@
 extends base
 
 block content
-    if errorMessage
-        span=errorMessage
     form(method="POST")
         h1 Join
         div.inputbox
-            input(name="name", type="text", required, autocomplete="off")
-            span Name
+            input(name="name", type="text", required, autocomplete="off", id="name")
+            label(for="name") Name
         div.inputbox
-            input(name="email", type="text", required, autocomplete="off")
-            span Email
+            input(name="email", type="text", required, autocomplete="off", id="email")
+            label(for="email") Email
         div.inputbox
-            input(name="username", type="text", required, autocomplete="off")
-            span Username
+            input(name="username", type="text", required, autocomplete="off", id="username")
+            label(for="username") Username
         div.inputbox
-            input(name="password", type="password", required)
-            span Password
+            input(name="password", type="password", required, id="password")
+            label(for="password") Password
         div.inputbox
-            input(name="password2", type="password", required)
-            span Confirm Password
+            input(name="password2", type="password", required, id="password2")
+            label(for="password2") Confirm Password
         input(type="submit", value="Join")
         include partials/social-login
     div.auth-switch

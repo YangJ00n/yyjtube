@@ -47,7 +47,7 @@ const handleDownload = async () => {
   ffmpeg.FS("writeFile", files.input, await fetchFile(videoFile));
 
   // webm을 mp4로 변환
-  await ffmpeg.run("-i", files.input, "-r", "60", files.output);
+  await ffmpeg.run("-i", files.input, "-r", "120", files.output);
 
   // 00:00:01 시간대를 찾고 1장의 스크린샷을 찍는다.
   await ffmpeg.run(
