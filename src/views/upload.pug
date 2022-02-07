@@ -10,14 +10,25 @@ block content
         if errorMessage
             span=errorMessage
         form(method="POST", enctype="multipart/form-data")
-            label(for="video") Video File
-            input(type="file", accept="video/*", required, id="video", name="video")
-            label(for="thumb") Thumbnail File
-            input(type="file", accept="image/*", required, id="thumb", name="thumb")
-            input(placeholder="Title", required, type="text", name="title", maxlength=80)
-            input(placeholder="Description", required, type="text", name="description", minlength=20)
-            input(placeholder="Hashtags, separated by comma.", required, type="text", name="hashtags")
+            h1 Upload Video
+            //- label(for="video") Video File
+            div.inputbox
+                input(type="file", accept="video/*", required, id="video", name="video")
+                span Video File
+            //- label(for="thumb") Thumbnail File
+            div.inputbox
+                input(type="file", accept="image/*", required, id="thumb", name="thumb")
+                span Thumbnail File
+            div.inputbox
+                input(required, type="text", name="title", maxlength=50, autocomplete="off")
+                span Title
+            div.inputbox
+                input(required, type="text", name="description", autocomplete="off")
+                span Description
+            div.inputbox
+                input(required, type="text", name="hashtags", autocomplete="off")
+                span Hashtags (separated by comma)
             input(type="submit", value="Upload Video")
 
-block scripts 
+block scripts
     script(src="/static/js/recorder.js") 

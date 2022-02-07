@@ -4,8 +4,13 @@ block content
     if errorMessage
         span=errorMessage
     form(method="POST")
-        input(placeholder="Username", name="username", type="text", required)
-        input(placeholder="Password", name="password", type="password", required)
+        h1 Login
+        div.inputbox
+            input(name="username", type="text", required, autocomplete="off")
+            span Username
+        div.inputbox
+            input(name="password", type="password", required)
+            span Password
         input(type="submit", value="Login")
         include partials/social-login
     div.auth-switch

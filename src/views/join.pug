@@ -4,12 +4,22 @@ block content
     if errorMessage
         span=errorMessage
     form(method="POST")
-        input(placeholder="Name", name="name", type="text", required)
-        input(placeholder="Email", name="email", type="email", required)
-        input(placeholder="Username", name="username", type="text", required)
-        input(placeholder="Password", name="password", type="password", required)
-        input(placeholder="Confirm Password", name="password2", type="password", required)
-        input(placeholder="Location", name="location", type="text", required)
+        h1 Join
+        div.inputbox
+            input(name="name", type="text", required, autocomplete="off")
+            span Name
+        div.inputbox
+            input(name="email", type="text", required, autocomplete="off")
+            span Email
+        div.inputbox
+            input(name="username", type="text", required, autocomplete="off")
+            span Username
+        div.inputbox
+            input(name="password", type="password", required)
+            span Password
+        div.inputbox
+            input(name="password2", type="password", required)
+            span Confirm Password
         input(type="submit", value="Join")
         include partials/social-login
     div.auth-switch

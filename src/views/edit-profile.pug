@@ -3,12 +3,19 @@ extends base
 block content
     //- multer는 enctype="multipart/form-data"인 form만 처리한다.
     form(method="POST", enctype="multipart/form-data").edit-profile__form
-        label(for="avatar") Avatar
-        input(type="file", id="avatar", name="avatar", accept="image/*")
-        input(placeholder="Name", name="name", type="text", required, value=loggedInUser.name)
-        input(placeholder="Email", name="email", type="email", required, value=loggedInUser.email)
-        input(placeholder="Username", name="username", type="text", required, value=loggedInUser.username)
-        input(placeholder="Location", name="location", type="text", required, value=loggedInUser.location)
+        h1 Edit Profile
+        div.inputbox
+            input(type="file", id="avatar", name="avatar", accept="image/*")
+            span Avatar
+        div.inputbox
+            input(name="name", type="text", required, value=loggedInUser.name, autocomplete="off")
+            span Name
+        div.inputbox
+            input(name="email", type="text", required, value=loggedInUser.email, autocomplete="off")
+            span Email
+        div.inputbox
+            input(name="username", type="text", required, value=loggedInUser.username, autocomplete="off")
+            span Username
         input(type="submit", value="Update Profile")
         if !loggedInUser.socialOnly
             div.edit-profile__password

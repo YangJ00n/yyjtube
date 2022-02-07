@@ -101,7 +101,7 @@ const handleStart = async () => {
   actionBtn.removeEventListener("click", handleStart);
   setTimeout(() => {
     actionBtn.addEventListener("click", handleStop);
-  }, 1000);
+  }, 1500);
 
   recorder = new MediaRecorder(stream);
   recorder.ondataavailable = (event) => {

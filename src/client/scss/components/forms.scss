@@ -7,6 +7,49 @@ form {
     border-radius: 10px;
     border: 1px solid rgba($color: #fff, $alpha: 0.1);
   }
+  h1 {
+    font-family: Noto Sans;
+    color: white;
+    font-size: 2em;
+    border-left: 5px solid $main;
+    padding: 10px;
+    letter-spacing: 5px;
+    margin-bottom: 40px;
+    font-weight: bold;
+    padding-left: 20px;
+  }
+  .inputbox {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 30px;
+    input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      outline: none;
+      background: none;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+    span {
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      font-size: 1em;
+      transition: 0.5s;
+      font-family: sans-serif;
+      color: silver;
+    }
+    input:not(input[type="file"]):focus ~ span,
+    input:not(input[type="file"]):valid ~ span,
+    input[type="file"] ~ span {
+      transform: translateX(-13px) translateY(-35px);
+      font-size: 1em;
+      color: white;
+    }
+  }
 }
 
 input:not(input[type="range"]),
@@ -28,13 +71,14 @@ input[type="submit"] {
 input[type="submit"],
 .social__btn {
   border-radius: 5px;
-  padding: 12px 20px;
+  padding: 12px 20px !important;
   background-color: white !important;
-  color: rgba($color: $red, $alpha: 1) !important;
+  color: $main !important;
   text-align: center !important;
-  cursor: pointer;
+  cursor: pointer !important;
   display: block;
   border: none;
+  font-weight: bold !important;
   &:focus {
     outline: none;
   }

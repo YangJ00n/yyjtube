@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
-  const { name, email, username, password, password2, location } = req.body;
+  const { name, email, username, password, password2 } = req.body;
   const pageTitle = "Join";
 
   // 비밀번호와 비밀번호 확인이 일치하는지 확인
@@ -31,7 +31,6 @@ export const postJoin = async (req, res) => {
       username,
       email,
       password,
-      location,
     });
     return res.redirect("/login");
   } catch (error) {
@@ -143,7 +142,6 @@ export const finishGithubLogin = async (req, res) => {
         email: emailObj.email,
         password: "",
         socialOnly: true,
-        location: userData.location,
       });
     }
 
@@ -166,12 +164,12 @@ export const getEdit = (req, res) =>
   res.render("edit-profile", { pageTitle: "Edit Profile" });
 export const postEdit = async (req, res) => {
   // const id = req.session.user.id;
-  // const { name, email, username, location } = req.body;
+  // const { name, email, username } = req.body;
   const {
     session: {
       user: { _id, avatarUrl },
     },
-    body: { name, email, username, location },
+    body: { name, email, username },
     file,
   } = req;
   // console.log(file);
@@ -201,7 +199,6 @@ export const postEdit = async (req, res) => {
       name,
       email,
       username,
-      location,
     },
     { new: true }
   );

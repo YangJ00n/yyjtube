@@ -3,8 +3,6 @@ mixin video(video)
         a(href=`/videos/${video.id}`)
             div.video-mixin__thumb(style=`background-image:url(/${video.thumbUrl});background-size:cover;background-position:center`)
         div.video-mixin__data
-            a(href=`/users/${video.owner._id}`)
-                img(src=video.owner.avatarUrl).video-mixin__avatar
             div
                 span.video-mixin__title=video.title
                 div.video-mixin__meta
