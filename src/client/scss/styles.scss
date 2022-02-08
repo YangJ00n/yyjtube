@@ -10,6 +10,7 @@
 @import "./components/forms.scss";
 @import "./components/social-login.scss";
 @import "./components/video-player.scss";
+@import "./components/comment.scss";
 
 // Screens
 @import "./screens/search.scss";
@@ -36,6 +37,45 @@ main {
   width: 100%;
   margin: 0 auto;
   margin-top: 50px;
+}
+
+input:not(input[type="range"]),
+input[type="submit"] {
+  all: unset;
+  padding: 15px 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: black;
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: white;
+  width: 90%;
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+input[type="submit"],
+.social__btn,
+.video__comment-btn,
+.video__edit,
+.video__delete {
+  border-radius: 5px;
+  padding: 12px 20px !important;
+  background-color: white !important;
+  color: $main !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  display: block;
+  border: none;
+  font-weight: bold !important;
+  &:focus {
+    outline: none;
+  }
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 // Classes

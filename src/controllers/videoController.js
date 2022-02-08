@@ -12,12 +12,22 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   // populate("owner") -> owner의 ObjectId를 실제 데이터로 변환한다.
-  const video = await Video.findById(id).populate("owner").populate("comments");
+  const video = await Video.findById(id).populate("owner");
   // console.log(video);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
-  return res.render("videos/watch", { pageTitle: video.title, video });
+
+  let comments = [];
+  for (const commentId of video.comments) {
+    comments.push(await Comment.findById(commentId).populate("owner"));
+  }
+
+  return res.render("videos/watch", {
+    pageTitle: video.title,
+    video,
+    comments,
+  });
 };
 
 export const getEdit = async (req, res) => {
@@ -112,7 +122,7 @@ export const deleteVideo = async (req, res) => {
       user: { _id },
     },
   } = req;
-  const video = await Video.findById(id);
+  const video = await Video.findById(id).populate("comments");
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
@@ -120,7 +130,11 @@ export const deleteVideo = async (req, res) => {
     req.flash("error", "You are not the owner of this video.");
     return res.status(403).redirect("/");
   }
+
   await Video.findByIdAndDelete(id);
+  for (const comment of video.comments) {
+    await Comment.findByIdAndDelete(comment._id);
+  }
 
   req.flash("success", "Video deleted!");
   return res.redirect("/");
@@ -161,13 +175,17 @@ export const createComment = async (req, res) => {
   if (!video) {
     return res.sendStatus(404);
   }
-  const comment = await Comment.create({
+
+  const newComment = await Comment.create({
     text,
     owner: user._id,
     video: id,
   });
-  video.comments.push(comment._id);
+
+  video.comments.push(newComment._id);
   video.save();
 
-  return res.status(201).json({ newCommentId: comment._id });
+  const comment = await Comment.findById(newComment._id).populate("owner");
+
+  return res.status(201).json({ comment });
 };

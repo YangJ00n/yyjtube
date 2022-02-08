@@ -2,57 +2,70 @@ extends ../base
 include ../mixins/comment
 
 block content
-    div#videoContainer(data-id=video._id)
-        video(src=`/${video.fileUrl}`) 
-        div#videoControls.videoControls.showing
-            div.videoControls__play
-                span#play.videoControls__playBtn
-                    i.fas.fa-play
-                div.videoControls__time
-                    span#currentTime 00:00
-                    span  / 
-                    span#totalTime 00:00
-            input(type="range",step="0.01", value="0", min="0")#timeline.videoControls__timeline
-            div.videoControls__volume
-                span#mute
-                    i.fas.fa-volume-up
-                input(type="range",step="0.01", value=0.5, min="0", max="1")#volume
-            div.videoControls__playbackRate
-                select(name="playbackRate")#playbackRate
-                    option(value="0.25") 0.25x
-                    option(value="0.5") 0.5x
-                    option(value="0.75") 0.75x
-                    option(value="1" selected) 1x
-                    option(value="1.25") 1.25x
-                    option(value="1.5") 1.5x
-                    option(value="1.75") 1.75x
-                    option(value="2") 2x
-            div.videoControls__fullScreen
-                span#fullScreen
-                    i.fas.fa-expand
+    div.video__container
+        div.video__main
+            div#videoContainer(data-id=video._id)
+                video(src=`/${video.fileUrl}`) 
+                div#videoControls.videoControls.showing
+                    div.videoControls__play
+                        span#play.videoControls__playBtn
+                            i.fas.fa-play
+                        div.videoControls__time
+                            span#currentTime 00:00
+                            span  / 
+                            span#totalTime 00:00
+                    input(type="range",step="0.01", value="0", min="0")#timeline.videoControls__timeline
+                    div.videoControls__volume
+                        span#mute
+                            i.fas.fa-volume-up
+                        input(type="range",step="0.01", value=0.5, min="0", max="1")#volume
+                    div.videoControls__playbackRate
+                        select(name="playbackRate")#playbackRate
+                            option(value="0.25") 0.25x
+                            option(value="0.5") 0.5x
+                            option(value="0.75") 0.75x
+                            option(value="1" selected) 1x
+                            option(value="1.25") 1.25x
+                            option(value="1.5") 1.5x
+                            option(value="1.75") 1.75x
+                            option(value="2") 2x
+                    div.videoControls__fullScreen
+                        span#fullScreen
+                            i.fas.fa-expand
 
-    div.video__data
-        p.video__title=video.title
-        small.video__owner Uploaded by 
-            a(href=`/users/${video.owner._id}`)=video.owner.name
-        small.video__createdAt=new Date(video.createdAt).toLocaleString("ko-kr")
-        if String(video.owner._id) === String(loggedInUser._id)
-            span 
-                a(href=`${video.id}/edit`) Edit Video &rarr;
-            br
-            span 
-                a(href=`${video.id}/delete`) Delete Video &rarr;
+            div.video__data
+                div.video__hashtags
+                    each hashtag in video.hashtags
+                        small=hashtag
+                h1.video__title=video.title
+                div.video__meta
+                    small.video__views Views #{video.meta.views}
+                    small  • 
+                    small.video__createdAt=new Date(video.createdAt).toLocaleString("ko-kr")
+                a(href=`/users/${video.owner._id}`).video__owner
+                    img(src=video.owner.avatarUrl).video__avatar
+                    span=video.owner.name
+                span.video__description=video.description
 
-    div.video__comments
-        ul
-            each comment in video.comments.reverse()
-                +comment(comment)
+                if String(video.owner._id) === String(loggedInUser._id)
+                    span.video__edit
+                        a(href=`${video.id}/edit`) Edit Video &rarr;
+                    span.video__delete
+                        a(href=`${video.id}/delete`) Delete Video &rarr;
 
-    if loggedIn
-        div.video__add-comments
-            form.video__comment-form#commentForm
-                textarea(cols="30", rows="10", placeholder="Write a nice comment...")
-                button Add Comment
+        div
+            div.video__comments
+                h1 Comments
+                if loggedIn
+                    div.video__add-comments
+                        form.video__comment-form#commentForm
+                            textarea(cols="30", rows="10", placeholder="Write a comment here...")
+                            button.video__comment-btn Add Comment
+
+                ul.video__comments-list
+                    each comment in comments.reverse()
+                        +comment(comment)
+
 
 block scripts 
     script(src="/static/js/videoPlayer.js") 

@@ -1,3 +1,12 @@
 mixin comment(comment)
-    li.video__comment(data-id=comment._id)
-        span=comment.text
+    li.comment-mixin
+        a(href=`/users/${comment.owner._id}`)
+            if comment.owner.avatarUrl.includes("github")
+                img(src=comment.owner.avatarUrl).comment-mixin__avatar
+            else 
+                img(src="/" + comment.owner.avatarUrl).comment-mixin__avatar
+        div(data-id=comment._id)
+            div.comment-mixin__meta
+                span=comment.owner.name
+                span=new Date(comment.createdAt).toLocaleString("ko-kr")
+            span.comment-mixin__title=comment.text

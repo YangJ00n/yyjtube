@@ -168,6 +168,7 @@ const handleKeyControls = (key) => {
 const handleKeydown = (event) => {
   const { code } = event;
   // console.log(code);
+  if (event.target === textarea) return;
   const preventEventKeyList = [
     "Space",
     "ArrowRight",
@@ -176,7 +177,7 @@ const handleKeydown = (event) => {
     "ArrowDown",
   ];
   if (preventEventKeyList.indexOf(code) !== -1) event.preventDefault();
-  if (event.target !== textarea) handleKeyControls(code);
+  handleKeyControls(code);
 };
 
 const handlePlaybackRate = () => {

@@ -22,7 +22,7 @@
     right: 0;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 4fr 16fr 4fr 1fr 1fr;
+    grid-template-columns: 5fr 16fr 3fr 1fr 1fr;
     gap: 10px;
     justify-content: space-between;
     background: linear-gradient(
@@ -38,11 +38,11 @@
       align-items: center;
       justify-content: space-around;
       .videoControls__playBtn {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         margin: 0px 15px;
       }
       .videoControls__time {
-        font-size: 1rem;
+        font-size: 0.8rem;
       }
     }
     .videoControls__volume {
@@ -50,9 +50,10 @@
       align-items: center;
       justify-content: space-between;
       span {
-        margin: 0 5px;
+        margin-right: 5px;
+        width: 25px;
         i {
-          font-size: 1.5rem;
+          font-size: 1.4rem;
         }
       }
     }
@@ -68,7 +69,7 @@
       }
     }
     .videoControls__fullScreen {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
     }
     input[type="range"] {
       -webkit-appearance: none;

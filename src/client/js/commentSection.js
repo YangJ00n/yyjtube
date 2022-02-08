@@ -1,14 +1,39 @@
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
 
-const addComment = (text, id) => {
-  const videoComments = document.querySelector(".video__comments ul");
+const addComment = (text, comment) => {
+  const videoComments = document.querySelector(".video__comments-list");
   const newComment = document.createElement("li");
+  newComment.className = "comment-mixin";
+
+  const a = document.createElement("a");
+  a.href = `/users/${comment.owner._id}`;
+  const avatar = document.createElement("img");
+  avatar.className = "comment-mixin__avatar";
+  const avatarUrl = comment.owner.avatarUrl;
+  avatar.src = avatarUrl.includes("github") ? avatarUrl : `/${avatarUrl}`;
+  a.appendChild(avatar);
+
+  const div = document.createElement("div");
+  div.dataset.id = comment._id;
+  const metaDiv = document.createElement("div");
+  metaDiv.className = "comment-mixin__meta";
+  const owner = document.createElement("span");
+  owner.innerText = comment.owner.name;
+  const createdAt = document.createElement("span");
+  createdAt.innerText = new Date(comment.createdAt).toLocaleString("ko-kr");
+  metaDiv.appendChild(owner);
+  metaDiv.appendChild(createdAt);
+  div.appendChild(metaDiv);
+
   const span = document.createElement("span");
   span.innerText = text;
-  newComment.className = "video__comment";
-  newComment.dataset.id = id;
-  newComment.appendChild(span);
+  span.className = "comment-mixin__title";
+  div.appendChild(span);
+
+  newComment.appendChild(a);
+  newComment.appendChild(div);
+
   videoComments.prepend(newComment);
 };
 
@@ -31,8 +56,8 @@ const handleSubmit = async (event) => {
 
   if (response.status === 201) {
     textarea.value = "";
-    const { newCommentId } = await response.json();
-    addComment(text, newCommentId);
+    const { comment } = await response.json();
+    addComment(text, comment);
   }
 };
 

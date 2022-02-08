@@ -9,6 +9,7 @@ module.exports = {
     videoPlayer: BASE_JS + "videoPlayer.js",
     recorder: BASE_JS + "recorder.js",
     commentSection: BASE_JS + "commentSection.js",
+    socialLogin: BASE_JS + "socialLogin.js",
   },
   mode: "development",
   watch: true, // 파일을 감시(watch)하고 변경될 때마다 다시 build 한다.
