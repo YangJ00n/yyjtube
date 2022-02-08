@@ -12,7 +12,7 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   // populate("owner") -> owner의 ObjectId를 실제 데이터로 변환한다.
-  const video = await Video.findById(id).populate("owner");
+  const video = await Video.findById(id).populate("owner").populate("comments");
   // console.log(video);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
@@ -166,6 +166,8 @@ export const createComment = async (req, res) => {
     owner: user._id,
     video: id,
   });
+  video.comments.push(comment._id);
+  video.save();
 
-  return res.sendStatus(201);
+  return res.status(201).json({ newCommentId: comment._id });
 };

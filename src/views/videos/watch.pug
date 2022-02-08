@@ -1,4 +1,5 @@
 extends ../base
+include ../mixins/comment
 
 block content
     div#videoContainer(data-id=video._id)
@@ -30,20 +31,25 @@ block content
                 span#fullScreen
                     i.fas.fa-expand
 
-    div 
-        p=video.description
-        small=video.createdAt
-    div 
-        small Uploaded by 
+    div.video__data
+        p.video__title=video.title
+        small.video__owner Uploaded by 
             a(href=`/users/${video.owner._id}`)=video.owner.name
-    if String(video.owner._id) === String(loggedInUser._id)
-        br
-        a(href=`${video.id}/edit`) Edit Video &rarr;
-        br
-        a(href=`${video.id}/delete`) Delete Video &rarr;
+        small.video__createdAt=new Date(video.createdAt).toLocaleString("ko-kr")
+        if String(video.owner._id) === String(loggedInUser._id)
+            span 
+                a(href=`${video.id}/edit`) Edit Video &rarr;
+            br
+            span 
+                a(href=`${video.id}/delete`) Delete Video &rarr;
+
+    div.video__comments
+        ul
+            each comment in video.comments.reverse()
+                +comment(comment)
 
     if loggedIn
-        div.video__comments
+        div.video__add-comments
             form.video__comment-form#commentForm
                 textarea(cols="30", rows="10", placeholder="Write a nice comment...")
                 button Add Comment

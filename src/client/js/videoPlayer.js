@@ -12,6 +12,7 @@ const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 const playbackRate = document.getElementById("playbackRate");
+const textarea = document.querySelector("textarea");
 
 let controlsTimeout = null;
 let isVideoPausedBefore; // is video paused before timeline change.
@@ -175,7 +176,7 @@ const handleKeydown = (event) => {
     "ArrowDown",
   ];
   if (preventEventKeyList.indexOf(code) !== -1) event.preventDefault();
-  handleKeyControls(code);
+  if (event.target !== textarea) handleKeyControls(code);
 };
 
 const handlePlaybackRate = () => {
