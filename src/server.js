@@ -19,6 +19,7 @@ app.set("view engine", "pug"); // set view engine as pug
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true })); // form의 value들을 이해할 수 있도록 하고, JS 형식으로 변형시켜준다.
+app.use(express.json()); // post했을 때 body내의 string을 받아서 json으로 바꿔준다.
 
 app.use(
   session({
