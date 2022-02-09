@@ -183,9 +183,43 @@ export const createComment = async (req, res) => {
   });
 
   video.comments.push(newComment._id);
-  video.save();
+  await video.save();
 
   const comment = await Comment.findById(newComment._id).populate("owner");
 
   return res.status(201).json({ comment });
+};
+
+export const deleteComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { videoId },
+    params: { id: commentId },
+  } = req;
+
+  const video = await Video.findById(videoId);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+
+  const idx = video.comments.indexOf(commentId);
+  if (idx === -1) {
+    return res.sendStatus(404);
+  }
+
+  const comment = await Comment.findById(commentId).populate("owner");
+  if (!comment) {
+    return res.sendStatus(404);
+  }
+
+  if (String(user._id) !== String(comment.owner._id)) {
+    return res.sendStatus(403);
+  }
+
+  video.comments.splice(idx, 1);
+  await video.save();
+
+  await Comment.findByIdAndDelete(commentId);
+
+  return res.sendStatus(201);
 };

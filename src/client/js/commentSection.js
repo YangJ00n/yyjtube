@@ -1,5 +1,6 @@
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
+const deleteBtns = document.querySelectorAll(".comment__delete");
 
 const addComment = (text, comment) => {
   const videoComments = document.querySelector(".video__comments-list");
@@ -14,25 +15,38 @@ const addComment = (text, comment) => {
   avatar.src = avatarUrl.includes("github") ? avatarUrl : `/${avatarUrl}`;
   a.appendChild(avatar);
 
-  const div = document.createElement("div");
-  div.dataset.id = comment._id;
+  const dataDiv = document.createElement("div");
+  dataDiv.className = "comment-mixin__data";
+  dataDiv.dataset.id = comment._id;
   const metaDiv = document.createElement("div");
   metaDiv.className = "comment-mixin__meta";
   const owner = document.createElement("span");
   owner.innerText = comment.owner.name;
+
+  const div = document.createElement("div");
   const createdAt = document.createElement("span");
   createdAt.innerText = new Date(comment.createdAt).toLocaleString("ko-kr");
+  const separater = document.createElement("span");
+  separater.innerText = " • ";
+  const deleteBtn = document.createElement("span");
+  deleteBtn.className = "comment__delete";
+  deleteBtn.innerText = "Delete";
+  deleteBtn.addEventListener("click", handleDelete);
+  div.appendChild(createdAt);
+  div.appendChild(separater);
+  div.appendChild(deleteBtn);
+
   metaDiv.appendChild(owner);
-  metaDiv.appendChild(createdAt);
-  div.appendChild(metaDiv);
+  metaDiv.appendChild(div);
+  dataDiv.appendChild(metaDiv);
 
   const span = document.createElement("span");
   span.innerText = text;
-  span.className = "comment-mixin__title";
-  div.appendChild(span);
+  span.className = "comment-mixin__text";
+  dataDiv.appendChild(span);
 
   newComment.appendChild(a);
-  newComment.appendChild(div);
+  newComment.appendChild(dataDiv);
 
   videoComments.prepend(newComment);
 };
@@ -61,4 +75,24 @@ const handleSubmit = async (event) => {
   }
 };
 
+const handleDelete = async (event) => {
+  const dataDiv = event.target.parentElement.parentElement.parentElement;
+  const commentId = dataDiv.dataset.id;
+  const videoId = videoContainer.dataset.id;
+
+  const response = await fetch(`/api/comments/${commentId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ videoId }),
+  });
+
+  if (response.status === 201) {
+    dataDiv.parentElement.remove();
+  }
+};
+
 if (form) form.addEventListener("submit", handleSubmit);
+
+deleteBtns.forEach((btn) => btn.addEventListener("click", handleDelete));

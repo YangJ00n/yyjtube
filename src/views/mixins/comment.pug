@@ -5,8 +5,12 @@ mixin comment(comment)
                 img(src=comment.owner.avatarUrl).comment-mixin__avatar
             else 
                 img(src="/" + comment.owner.avatarUrl).comment-mixin__avatar
-        div(data-id=comment._id)
+        div.comment-mixin__data(data-id=comment._id)
             div.comment-mixin__meta
                 span=comment.owner.name
-                span=new Date(comment.createdAt).toLocaleString("ko-kr")
-            span.comment-mixin__title=comment.text
+                div 
+                    span=new Date(comment.createdAt).toLocaleString("ko-kr")
+                    if String(comment.owner._id) === String(loggedInUser._id)
+                        span  • 
+                        span.comment__delete Delete
+            span.comment-mixin__text=comment.text
