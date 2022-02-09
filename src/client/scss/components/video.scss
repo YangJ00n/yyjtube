@@ -8,12 +8,14 @@
   }
   .video-mixin__thumb {
     height: 160px;
-    border-radius: 7px;
+    border-radius: 7px 7px 0 0;
     width: 100%;
     background-color: ivory;
   }
   .video-mixin__data {
-    padding: 10px 5px;
+    background-color: $header_bg;
+    border-radius: 0 0 7px 7px;
+    padding: 10px;
     display: flex;
     .video-mixin__title {
       font-size: 18px;

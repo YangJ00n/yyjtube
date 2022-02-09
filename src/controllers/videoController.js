@@ -223,3 +223,18 @@ export const deleteComment = async (req, res) => {
 
   return res.sendStatus(201);
 };
+
+export const seeHashtag = async (req, res) => {
+  const { hashtag } = req.params;
+  const videos = await Video.find({
+    hashtags: { $elemMatch: { $in: [hashtag] } },
+  })
+    .sort({ createdAt: "desc" })
+    .populate("owner");
+
+  return res.render("videos/hashtag", {
+    pageTitle: `#${hashtag}`,
+    videos,
+    hashtag,
+  });
+};

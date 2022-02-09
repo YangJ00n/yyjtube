@@ -6,6 +6,7 @@ import {
   getUpload,
   postUpload,
   deleteVideo,
+  seeHashtag,
 } from "../controllers/videoController";
 import { protectorMiddleware, videoUpload } from "../middlewares";
 
@@ -32,5 +33,6 @@ videoRouter
     ]),
     postUpload
   );
+videoRouter.get("/hashtags/:hashtag", seeHashtag);
 
 export default videoRouter;

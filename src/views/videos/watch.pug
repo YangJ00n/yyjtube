@@ -36,22 +36,26 @@ block content
             div.video__data
                 div.video__hashtags
                     each hashtag in video.hashtags
-                        small=hashtag
+                        a(href=`hashtags/${hashtag}`) 
+                            small ##{hashtag}
                 h1.video__title=video.title
                 div.video__meta
                     small.video__views Views #{video.meta.views}
                     small  • 
                     small.video__createdAt=new Date(video.createdAt).toLocaleString("ko-kr")
                 a(href=`/users/${video.owner._id}`).video__owner
-                    img(src=video.owner.avatarUrl).video__avatar
+                    if video.owner.avatarUrl.includes("github") 
+                        img(src=video.owner.avatarUrl).video__avatar
+                    else 
+                        img(src="/" + video.owner.avatarUrl).video__avatar
                     span=video.owner.name
                 span.video__description=video.description
 
                 if String(video.owner._id) === String(loggedInUser._id)
-                    span.video__edit
-                        a(href=`${video.id}/edit`) Edit Video &rarr;
-                    span.video__delete
-                        a(href=`${video.id}/delete`) Delete Video &rarr;
+                    a.video__edit(href=`${video.id}/edit`)
+                        span Edit Video &rarr;
+                    a.video__delete(href=`${video.id}/delete`)
+                        span Delete Video &rarr;
 
         div
             div.video__comments
@@ -65,6 +69,9 @@ block content
                 ul.video__comments-list
                     each comment in comments.reverse()
                         +comment(comment)
+                    else 
+                        if !loggedIn
+                            p No comments found.
 
 
 block scripts 

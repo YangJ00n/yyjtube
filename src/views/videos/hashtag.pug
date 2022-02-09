@@ -1,0 +1,10 @@
+extends ../base
+include ../mixins/video
+
+block content
+    h1 ##{hashtag}
+    div.video-grid
+        each video in videos
+            +video(video)
+        else
+            span.empty__message No hashtag found
