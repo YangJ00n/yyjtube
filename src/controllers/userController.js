@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import { getElapsedTime } from "./videoController";
 
 export const getJoin = (req, res) =>
   res.render("users/join", { pageTitle: "Join" });
@@ -266,5 +267,6 @@ export const seeProfile = async (req, res) => {
   return res.render("users/profile", {
     pageTitle: user.name,
     user,
+    getElapsedTime,
   });
 };

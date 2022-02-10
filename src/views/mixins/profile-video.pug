@@ -7,4 +7,5 @@ mixin video(video)
                 span.video-mixin__title=video.title
                 div.video-mixin__meta
                     span #{video.owner.name} • 
-                    span #{video.meta.views} 회
+                    span #{video.meta.views} 회 • 
+                    span=getElapsedTime(video.createdAt, Date.now())

@@ -2,11 +2,34 @@ import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 
+export const getElapsedTime = (createdAt, now) => {
+  let gap = (now - createdAt) / 1000;
+  if (gap < 60) return `${Math.floor(gap)}초 전`;
+
+  gap /= 60;
+  if (gap < 60) return `${Math.floor(gap)}분 전`;
+
+  gap /= 60;
+  if (gap < 24) return `${Math.floor(gap)}시간 전`;
+
+  gap /= 24;
+  if (gap < 7) return `${Math.floor(gap)}일 전`;
+
+  gap /= 7;
+  if (gap < 365 / 12 / 7) return `${Math.floor(gap)}주 전`;
+
+  gap = (gap * 7) / (365 / 12);
+  if (gap < 12) return `${Math.floor(gap)}개월 전`;
+
+  gap /= 12;
+  return `${Math.floor(gap)}년 전`;
+};
+
 export const home = async (req, res) => {
   const videos = await Video.find({})
     .sort({ createdAt: "desc" }) // asc:오름차순, desc:내림차순
     .populate("owner");
-  return res.render("home", { pageTitle: "Home", videos });
+  return res.render("home", { pageTitle: "Home", videos, getElapsedTime });
 };
 
 export const watch = async (req, res) => {
@@ -27,6 +50,7 @@ export const watch = async (req, res) => {
     pageTitle: video.title,
     video,
     comments,
+    getElapsedTime,
   });
 };
 
@@ -236,5 +260,6 @@ export const seeHashtag = async (req, res) => {
     pageTitle: `#${hashtag}`,
     videos,
     hashtag,
+    getElapsedTime,
   });
 };

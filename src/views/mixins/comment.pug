@@ -9,7 +9,8 @@ mixin comment(comment)
             div.comment-mixin__meta
                 span=comment.owner.name
                 div 
-                    span=new Date(comment.createdAt).toLocaleString("ko-kr")
+                    //- span=new Date(comment.createdAt).toLocaleString("ko-kr")
+                    span=getElapsedTime(comment.createdAt, Date.now())
                     if String(comment.owner._id) === String(loggedInUser._id)
                         span  • 
                         span.comment__delete Delete

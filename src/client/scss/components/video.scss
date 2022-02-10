@@ -1,10 +1,11 @@
 // video mixin
 .video-mixin {
+  box-shadow: 0 3px 5px rgb(255 255 255 / 2%), 0 3px 5px rgb(255 255 255 / 10%);
   &:hover {
-    transform: scale(0.95);
-    box-shadow: 0 3px 5px rgb(255 255 255 / 2%),
-      0 3px 5px rgb(255 255 255 / 10%);
-    transition: all 0.2s;
+    transform: scale(0.98);
+    transition: all 0.3s;
+    box-shadow: 0 5px 7px rgb(255 255 255 / 2%),
+      0 5px 7px rgb(255 255 255 / 10%);
   }
   .video-mixin__thumb {
     height: 160px;

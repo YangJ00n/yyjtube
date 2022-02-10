@@ -9,6 +9,7 @@ block content
         else
             img.avatar(src="/" + user.avatarUrl)
         h3=user.name
+        small Created At #{new Date(user.createdAt).toLocaleString("ko-kr")}
     div.video-grid
         each video in user.videos
             +video(video)

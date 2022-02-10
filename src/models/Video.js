@@ -22,7 +22,7 @@ videoSchema.static("formatHashtags", function (hashtags) {
   hashtags.split(",").map((word) => {
     word = word.replaceAll(" ", "").toLowerCase();
     word = word.indexOf("#") !== -1 ? word.replaceAll("#", "") : word;
-    results.push(word);
+    if (results.indexOf(word) === -1) results.push(word);
   });
   return results;
 });
