@@ -22,10 +22,11 @@ const addComment = (text, comment) => {
   metaDiv.className = "comment-mixin__meta";
   const owner = document.createElement("span");
   owner.innerText = comment.owner.name;
+  owner.className = "comment-mixin__name";
 
   const div = document.createElement("div");
   const createdAt = document.createElement("span");
-  createdAt.innerText = new Date(comment.createdAt).toLocaleString("ko-kr");
+  createdAt.innerText = "방금 전";
   const separater = document.createElement("span");
   separater.innerText = " • ";
   const deleteBtn = document.createElement("span");

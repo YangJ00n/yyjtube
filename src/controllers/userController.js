@@ -1,4 +1,5 @@
 import User from "../models/User";
+import Video from "../models/Video";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 import { getElapsedTime } from "./videoController";
@@ -264,9 +265,17 @@ export const seeProfile = async (req, res) => {
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." });
   }
+
+  const likedVideos = [];
+  for (const likedVideoId of user.likes) {
+    const video = await Video.findById(likedVideoId).populate("owner");
+    likedVideos.unshift(video);
+  }
+
   return res.render("users/profile", {
     pageTitle: user.name,
     user,
     getElapsedTime,
+    likedVideos,
   });
 };

@@ -18,8 +18,13 @@
   .comment-mixin__meta {
     margin-bottom: 10px;
     font-size: 11px;
+    .comment-mixin__name {
+      display: block;
+      margin-bottom: 1px;
+    }
     .comment__delete {
       cursor: pointer;
+      text-decoration: underline;
     }
   }
 }

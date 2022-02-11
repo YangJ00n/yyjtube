@@ -31,8 +31,15 @@
     border-bottom: 1px solid rgba($color: #fff, $alpha: 0.1);
     padding-bottom: 10px;
     .video__createdAt,
-    .video__views {
+    .video__views,
+    .video__likes span {
       font-size: 12px;
+    }
+    i {
+      cursor: pointer;
+    }
+    .like {
+      color: $main;
     }
   }
   .video__avatar {

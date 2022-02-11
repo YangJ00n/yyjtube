@@ -42,9 +42,14 @@ block content
                             small ##{hashtag}
                 h1.video__title=video.title
                 div.video__meta
-                    small.video__views Views #{video.meta.views}
-                    small  • 
-                    small.video__createdAt=new Date(video.createdAt).toLocaleString("ko-kr")
+                    small.video__views Views #{video.meta.views} • 
+                    small.video__createdAt #{new Date(video.createdAt).toLocaleString("ko-kr")} • 
+                    small.video__likes
+                        if video.meta.likes.indexOf(loggedInUser._id) === -1
+                            i.fas.fa-thumbs-up#like
+                        else 
+                            i.fas.fa-thumbs-up.liek#like.like
+                        span#likesCnt  #{video.meta.likes.length}
                 a(href=`/users/${video.owner._id}`).video__owner
                     if video.owner.avatarUrl.includes("github") 
                         img(src=video.owner.avatarUrl).video__avatar
@@ -80,3 +85,4 @@ block scripts
     script(src="/static/js/videoPlayer.js") 
     if loggedIn
         script(src="/static/js/commentSection.js") 
+        script(src="/static/js/likeSection.js") 

@@ -10,6 +10,9 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   createdAt: { type: Date, required: true, default: Date.now },
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
+  likes: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Video" },
+  ],
 });
 
 // middleware which execute before "save"

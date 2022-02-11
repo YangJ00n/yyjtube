@@ -7,9 +7,8 @@ mixin comment(comment)
                 img(src="/" + comment.owner.avatarUrl).comment-mixin__avatar
         div.comment-mixin__data(data-id=comment._id)
             div.comment-mixin__meta
-                span=comment.owner.name
+                span.comment-mixin__name=comment.owner.name
                 div 
-                    //- span=new Date(comment.createdAt).toLocaleString("ko-kr")
                     span=getElapsedTime(comment.createdAt, Date.now())
                     if String(comment.owner._id) === String(loggedInUser._id)
                         span  • 

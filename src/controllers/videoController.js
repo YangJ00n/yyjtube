@@ -4,7 +4,10 @@ import Comment from "../models/Comment";
 
 export const getElapsedTime = (createdAt, now) => {
   let gap = (now - createdAt) / 1000;
-  if (gap < 60) return `${Math.floor(gap)}초 전`;
+  if (gap < 60) {
+    gap = Math.floor(gap);
+    return gap === 0 ? "방금 전" : `${gap}초 전`;
+  }
 
   gap /= 60;
   if (gap < 60) return `${Math.floor(gap)}분 전`;
@@ -159,6 +162,12 @@ export const deleteVideo = async (req, res) => {
   for (const comment of video.comments) {
     await Comment.findByIdAndDelete(comment._id);
   }
+  for (const likedUserId of video.meta.likes) {
+    const user = await User.findById(likedUserId);
+    const idx = user.likes.indexOf(id);
+    user.likes.splice(idx, 1);
+    await user.save();
+  }
 
   req.flash("success", "Video deleted!");
   return res.redirect("/");
@@ -174,7 +183,11 @@ export const search = async (req, res) => {
       },
     }).populate("owner");
   }
-  return res.render("videos/search", { pageTitle: "Search", videos });
+  return res.render("videos/search", {
+    pageTitle: "Search",
+    videos,
+    getElapsedTime,
+  });
 };
 
 export const registerView = async (req, res) => {
@@ -262,4 +275,61 @@ export const seeHashtag = async (req, res) => {
     hashtag,
     getElapsedTime,
   });
+};
+
+export const registerLike = async (req, res) => {
+  const {
+    session: {
+      user: { _id: userId },
+    },
+    params: { id: videoId },
+  } = req;
+
+  const video = await Video.findById(videoId);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+
+  const idx = video.meta.likes.indexOf(userId);
+  if (idx !== -1) {
+    return res.sendStatus(403);
+  }
+
+  video.meta.likes.push(userId);
+  await video.save();
+
+  const user = await User.findById(userId);
+  user.likes.push(videoId);
+  await user.save();
+
+  return res.sendStatus(200);
+};
+
+export const removeLike = async (req, res) => {
+  const {
+    session: {
+      user: { _id: userId },
+    },
+    params: { id: videoId },
+  } = req;
+
+  const video = await Video.findById(videoId);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+
+  let idx = video.meta.likes.indexOf(userId);
+  if (idx === -1) {
+    return res.sendStatus(403);
+  }
+
+  video.meta.likes.splice(idx, 1);
+  await video.save();
+
+  const user = await User.findById(userId);
+  idx = user.likes.indexOf(videoId);
+  user.likes.splice(idx, 1);
+  await user.save();
+
+  return res.sendStatus(200);
 };
