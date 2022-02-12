@@ -12,8 +12,6 @@ module.exports = {
     socialLogin: BASE_JS + "socialLogin.js",
     likeSection: BASE_JS + "likeSection.js",
   },
-  mode: "development",
-  watch: true, // 파일을 감시(watch)하고 변경될 때마다 다시 build 한다.
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",
