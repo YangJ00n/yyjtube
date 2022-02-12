@@ -96,6 +96,7 @@ const handleStop = () => {
 const handleStart = async () => {
   if (isMicOn) await _getUserMedia();
 
+  window.addEventListener("beforeunload", handleBeforeunload);
   micBtn.classList.add("none");
   actionBtn.innerText = "Stop Recording";
   actionBtn.removeEventListener("click", handleStart);
@@ -115,6 +116,11 @@ const handleStart = async () => {
     video.play();
   };
   recorder.start();
+
+  // 1분이 지나면 자동으로 종료
+  setTimeout(() => {
+    handleStop();
+  }, 60000);
 };
 
 const handleMic = () => {
@@ -141,8 +147,13 @@ const init = async () => {
 
   video.classList.remove("none");
   micBtn.classList.remove("none");
-  actionBtn.innerText = "Start Recording";
+  actionBtn.innerText = "Start Recording (Maximum: 1 minutes)";
   actionBtn.addEventListener("click", handleStart);
+};
+
+const handleBeforeunload = (event) => {
+  event.preventDefault();
+  event.returnValue = "";
 };
 
 actionBtn.addEventListener("click", init);

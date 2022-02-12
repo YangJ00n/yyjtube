@@ -1,6 +1,5 @@
 // video mixin
 .video-mixin {
-  box-shadow: 0 3px 5px rgb(255 255 255 / 2%), 0 3px 5px rgb(255 255 255 / 10%);
   &:hover {
     transform: scale(0.98);
     transition: all 0.3s;
@@ -9,13 +8,11 @@
   }
   .video-mixin__thumb {
     height: 160px;
-    border-radius: 7px 7px 0 0;
     width: 100%;
     background-color: ivory;
   }
   .video-mixin__data {
     background-color: $header_bg;
-    border-radius: 0 0 7px 7px;
     padding: 10px;
     display: flex;
     .video-mixin__title {
@@ -25,6 +22,9 @@
     .video-mixin__meta {
       margin-top: 5px;
       font-size: 12px;
+      span {
+        word-break: break-all;
+      }
     }
     .video-mixin__avatar {
       width: 40px;

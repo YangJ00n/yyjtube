@@ -21,6 +21,10 @@
 .profile__videos {
   h1 {
     margin-bottom: 20px;
+    font-size: 25px;
+    .profile__name {
+      color: $main;
+    }
   }
   margin-bottom: 60px;
 }

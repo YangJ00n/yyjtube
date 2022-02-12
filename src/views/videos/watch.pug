@@ -23,15 +23,11 @@ block content
                         div
                         div.videoControls__playbackRate
                             select(name="playbackRate")#playbackRate
-                                option(value="0.25") 0.25x
-                                option(value="0.5") 0.5x
-                                option(value="0.75") 0.75x
-                                option(value="1" selected) 1x
-                                option(value="1.25") 1.25x
-                                option(value="1.5") 1.5x
-                                option(value="1.75") 1.75x
-                                option(value="2") 2x
-                        
+                                each rate in ["0.25","0.5","0.75","1","1.25","1.5","1.75","2"]
+                                    if rate === "1"
+                                        option(value=rate selected) #{rate}x
+                                    else
+                                        option(value=rate) #{rate}x
                         span#fullScreen.videoControls__fullScreen
                             i.fas.fa-expand
 

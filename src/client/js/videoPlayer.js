@@ -109,9 +109,11 @@ const handleFullscreen = () => {
   if (fullscreen) {
     document.exitFullscreen();
     fullScreenIcon.classList = "fas fa-expand";
+    video.classList.remove("fullscreen");
   } else {
     videoContainer.requestFullscreen();
     fullScreenIcon.classList = "fas fa-compress";
+    video.classList.add("fullscreen");
   }
 };
 

@@ -26,7 +26,7 @@ form {
       position: absolute;
       top: 18px;
       left: 20px;
-      font-size: 1em;
+      font-size: 14px;
       transition: 0.5s;
       font-family: sans-serif;
       color: silver;
@@ -35,7 +35,6 @@ form {
     input:not(input[type="file"]):valid ~ label,
     input[type="file"] ~ label {
       transform: translateX(-13px) translateY(-35px);
-      font-size: 1em;
       color: white;
     }
   }

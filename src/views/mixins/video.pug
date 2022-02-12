@@ -13,4 +13,11 @@ mixin video(video)
                 div.video-mixin__meta
                     span #{video.owner.name} • 
                     span #{video.meta.views} 회 • 
-                    span=getElapsedTime(video.createdAt, Date.now())
+                    span #{getElapsedTime(video.createdAt, Date.now())} • 
+                    span.video-mixin__likes
+                        a(href=`/videos/${video.id}`)
+                            if video.meta.likes.indexOf(loggedInUser._id) === -1
+                                i.fas.fa-thumbs-up
+                            else 
+                                i.fas.fa-thumbs-up.liek.like
+                        span  #{video.meta.likes.length}

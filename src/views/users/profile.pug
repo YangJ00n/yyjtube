@@ -10,14 +10,18 @@ block content
         h3=user.name
         small Created At #{new Date(user.createdAt).toLocaleString("ko-kr")}
     div.profile__videos
-        h1 My Videos
+        h1 
+            span.profile__name #{user.name}
+            span 's Videos
         div.video-grid
             each video in user.videos
                 +video(video)
             else
                 span.empty__message No videos found
     div.profile__videos
-        h1 Liked Videos
+        h1 
+            span.profile__name #{user.name} 
+            span likes these videos.
         div.video-grid
             each video in likedVideos
                 +video(video)
