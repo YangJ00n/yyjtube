@@ -1,4 +1,5 @@
 // As early as possible in my application, import and configure dotenv.
+import "regenerator-runtime";
 import "dotenv/config";
 import "./db";
 import "./models/Video";
