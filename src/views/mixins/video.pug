@@ -1,13 +1,10 @@
 mixin video(video)
     div.video-mixin
         a(href=`/videos/${video.id}`)
-            div.video-mixin__thumb(style=`background-image:url(/${video.thumbUrl});background-size:cover;background-position:center`)
+            div.video-mixin__thumb(style=`background-image:url(${video.thumbUrl});background-size:cover;background-position:center`)
         div.video-mixin__data
             a(href=`/users/${video.owner._id}`)
-                if video.owner.avatarUrl.includes("github") 
-                    img(src=video.owner.avatarUrl).video-mixin__avatar
-                else 
-                    img(src="/" + video.owner.avatarUrl).video-mixin__avatar
+                img(src=video.owner.avatarUrl).video-mixin__avatar
             div
                 span.video-mixin__title=video.title
                 div.video-mixin__meta
