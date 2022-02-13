@@ -3,6 +3,7 @@ import Video from "../models/Video";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 import { getElapsedTime } from "./videoController";
+import { isHeroku } from "../middlewares";
 
 export const getJoin = (req, res) =>
   res.render("users/join", { pageTitle: "Join" });
@@ -195,7 +196,6 @@ export const postEdit = async (req, res) => {
     return res.render("users/edit-profile", { pageTitle });
   }
 
-  const isHeroku = process.env.NODE_ENV === "production";
   // 사용자 정보 업데이트
   const updatedUser = await User.findByIdAndUpdate(
     _id,

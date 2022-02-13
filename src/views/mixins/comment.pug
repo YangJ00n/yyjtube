@@ -1,7 +1,7 @@
 mixin comment(comment)
     li.comment-mixin
         a(href=`/users/${comment.owner._id}`)
-            if comment.owner.avatarUrl.includes("github")
+            if isHeroku
                 img(src=comment.owner.avatarUrl).comment-mixin__avatar
             else 
                 img(src="/" + comment.owner.avatarUrl).comment-mixin__avatar

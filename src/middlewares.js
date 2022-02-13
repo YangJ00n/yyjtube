@@ -1,28 +1,7 @@
 import multer from "multer";
-import multerS3 from "multer-s3";
-import aws from "aws-sdk";
+import s3, { s3ImageUploader, s3VideoUploader } from "./s3";
 
-const s3 = new aws.S3({
-  credentials: {
-    accessKeyId: process.env.AWS_ID,
-    secretAccessKey: process.env.AWS_SECRET,
-  },
-});
-
-const isHeroku = process.env.NODE_ENV === "production";
-
-const s3ImageUploader = multerS3({
-  s3: s3,
-  bucket: "yyjtube/images",
-  acl: "public-read",
-});
-
-const s3VideoUploader = multerS3({
-  s3: s3,
-  bucket: "yyjtube/videos",
-  acl: "public-read",
-  contentType: multerS3.AUTO_CONTENT_TYPE,
-});
+export const isHeroku = process.env.NODE_ENV === "production";
 
 export const localsMiddleware = (req, res, next) => {
   // pug파일에서 res.locas에 접근할 수 있다.
@@ -70,12 +49,19 @@ export const videoUpload = multer({
   storage: isHeroku ? s3VideoUploader : undefined,
 });
 
-export const s3DeleteFile = (req, res, next) => {
-  if (!req.file) return next();
+export const s3DeleteAvatar = (req, res, next) => {
+  const fileName = req.session.user.avatarUrl.split("images/")[1];
+  if (fileName === undefined || !isHeroku) return next();
 
-  s3.deleteObject({
-    Bucket: "yyjtube",
-    Key: `${req.session.user.avatarUrl.split(".com/")[1]}`,
-  });
+  s3.deleteObject(
+    {
+      Bucket: "yyjtube",
+      Key: `images/${fileName}`,
+    },
+    (error, data) => {
+      if (error) throw error;
+      console.log("s3 deleteImage", data);
+    }
+  );
   next();
 };

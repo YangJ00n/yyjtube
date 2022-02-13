@@ -1,6 +1,8 @@
 import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+import s3 from "../s3";
+import { isHeroku } from "../middlewares";
 
 export const getElapsedTime = (createdAt, now) => {
   let gap = (now - createdAt) / 1000;
@@ -118,7 +120,6 @@ export const postUpload = async (req, res) => {
     files: { video, thumb },
   } = req;
 
-  const isHeroku = process.env.NODE_ENV === "production";
   try {
     const newVideo = await Video.create({
       title,
@@ -137,11 +138,24 @@ export const postUpload = async (req, res) => {
     return res.redirect("/");
   } catch (error) {
     console.log(error);
-    req.flash("success", "Fail to Upload.");
+    req.flash("error", "Fail to Upload.");
     return res
       .status(400)
       .render("videos/upload", { pageTitle: "Upload Video" });
   }
+};
+
+const s3DeleteVideo = (fileName) => {
+  s3.deleteObject(
+    {
+      Bucket: "yyjtube",
+      Key: `videos/${fileName}`,
+    },
+    (error, data) => {
+      if (error) throw error;
+      console.log("s3 deleteVideo", data);
+    }
+  );
 };
 
 export const deleteVideo = async (req, res) => {
@@ -160,15 +174,23 @@ export const deleteVideo = async (req, res) => {
     return res.status(403).redirect("/");
   }
 
-  await Video.findByIdAndDelete(id);
-  for (const comment of video.comments) {
-    await Comment.findByIdAndDelete(comment._id);
-  }
-  for (const likedUserId of video.meta.likes) {
-    const user = await User.findById(likedUserId);
-    const idx = user.likes.indexOf(id);
-    user.likes.splice(idx, 1);
-    await user.save();
+  // s3 Delete Video and Thumbnail
+  if (isHeroku) {
+    const vidoeName = video.fileUrl.split("videos/")[1];
+    s3DeleteVideo(vidoeName);
+    const thumbName = video.thumbUrl.split("videos/")[1];
+    s3DeleteVideo(thumbName);
+
+    await Video.findByIdAndDelete(id);
+    for (const comment of video.comments) {
+      await Comment.findByIdAndDelete(comment._id);
+    }
+    for (const likedUserId of video.meta.likes) {
+      const user = await User.findById(likedUserId);
+      const idx = user.likes.indexOf(id);
+      user.likes.splice(idx, 1);
+      await user.save();
+    }
   }
 
   req.flash("success", "Video deleted!");

@@ -13,7 +13,7 @@ const addComment = (text, comment) => {
   const avatar = document.createElement("img");
   avatar.className = "comment-mixin__avatar";
   const avatarUrl = comment.owner.avatarUrl;
-  avatar.src = avatarUrl.includes("github") ? avatarUrl : `/${avatarUrl}`;
+  avatar.src = avatarUrl.includes("http") ? avatarUrl : `/${avatarUrl}`;
   a.appendChild(avatar);
 
   const dataDiv = document.createElement("div");
