@@ -16,7 +16,10 @@ header
                     a(href="/users/logout")  Log Out
                 li
                     a(href=`/users/${loggedInUser._id}`)
-                        img.header__avatar(src=loggedInUser.avatarUrl)
+                        if isHeroku
+                            img.header__avatar(src=loggedInUser.avatarUrl)
+                        else 
+                            img.header__avatar(src="/" + loggedInUser.avatarUrl)
             else
                 li
                     a(href="/login")  Login                        

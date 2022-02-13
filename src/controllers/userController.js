@@ -195,11 +195,12 @@ export const postEdit = async (req, res) => {
     return res.render("users/edit-profile", { pageTitle });
   }
 
+  const isHeroku = process.env.NODE_ENV === "production";
   // 사용자 정보 업데이트
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.location : avatarUrl,
+      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
       name,
       email,
       username,

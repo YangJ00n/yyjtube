@@ -5,7 +5,10 @@ block content
     div.video__container
         div.video__main
             div#videoContainer(data-id=video._id)
-                video(src=video.fileUrl) 
+                if isHeroku
+                    video(src=video.fileUrl) 
+                else 
+                    video(src="/" + video.fileUrl) 
                 div#videoControls.videoControls.showing
                     div.videoControls__top
                         input(type="range",step="0.01", value="0", min="0")#timeline.videoControls__timeline
@@ -47,7 +50,10 @@ block content
                             i.fas.fa-thumbs-up.liek#like.like
                         span#likesCnt  #{video.meta.likes.length}
                 a(href=`/users/${video.owner._id}`).video__owner
-                    img(src=video.owner.avatarUrl).video__avatar
+                    if isHeroku
+                        img(src=video.owner.avatarUrl).video__avatar
+                    else 
+                        img(src="/" + video.owner.avatarUrl).video__avatar
                     span=video.owner.name
                 span.video__description=video.description
 

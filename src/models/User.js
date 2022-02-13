@@ -1,9 +1,16 @@
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
+const isHeroku = process.env.NODE_ENV === "production";
+
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
-  avatarUrl: { type: String, default: "uploads/default-avatar.jpeg" },
+  avatarUrl: {
+    type: String,
+    default: isHeroku
+      ? "https://yyjtube.s3.ap-northeast-2.amazonaws.com/default-avatar.jpeg"
+      : "uploads/default-avatar.jpeg",
+  },
   socialOnly: { type: Boolean, default: false },
   username: { type: String, required: true, unique: true },
   password: { type: String },
