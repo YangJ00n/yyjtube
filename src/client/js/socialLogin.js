@@ -1,4 +1,6 @@
 const socialLogin = document.getElementById("socialLogin");
+const form = document.querySelector("form");
+const btn = form.querySelector("input[type=submit]");
 
 const handleSocialLogin = () => {
   const a = socialLogin.querySelector("a");
@@ -8,6 +10,7 @@ const handleSocialLogin = () => {
     a.removeAttribute("href");
     a.innerText = "Logging in now...";
     window.location = href;
+    btn.disabled = true;
   }
 };
 

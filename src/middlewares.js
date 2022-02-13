@@ -21,12 +21,13 @@ const s3VideoUploader = multerS3({
   s3: s3,
   bucket: "yyjtube/videos",
   acl: "public-read",
+  contentType: multerS3.AUTO_CONTENT_TYPE,
 });
 
 export const localsMiddleware = (req, res, next) => {
   // pug파일에서 res.locas에 접근할 수 있다.
   res.locals.loggedIn = Boolean(req.session.loggedIn);
-  res.locals.siteName = "Wetube";
+  res.locals.siteName = "YYJtube";
   res.locals.loggedInUser = req.session.user || {};
   res.locals.isHeroku = isHeroku;
   next();
@@ -68,3 +69,13 @@ export const videoUpload = multer({
   },
   storage: isHeroku ? s3VideoUploader : undefined,
 });
+
+export const s3DeleteFile = (req, res, next) => {
+  if (!req.file) return next();
+
+  s3.deleteObject({
+    Bucket: "yyjtube",
+    Key: `${req.session.user.avatarUrl.split(".com/")[1]}`,
+  });
+  next();
+};

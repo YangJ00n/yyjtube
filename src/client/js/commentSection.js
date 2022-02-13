@@ -1,5 +1,6 @@
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
+const btn = form.querySelector("button");
 const deleteBtns = document.querySelectorAll(".comment__delete");
 
 const addComment = (text, comment) => {
@@ -54,6 +55,7 @@ const addComment = (text, comment) => {
 
 const handleSubmit = async (event) => {
   event.preventDefault();
+  btn.disabled = true;
   const textarea = form.querySelector("textarea");
   const text = textarea.value;
   const videoId = videoContainer.dataset.id;
@@ -74,9 +76,11 @@ const handleSubmit = async (event) => {
     const { comment } = await response.json();
     addComment(text, comment);
   }
+  btn.disabled = false;
 };
 
 const handleDelete = async (event) => {
+  event.target.removeEventListener("click", handleDelete);
   const dataDiv = event.target.parentElement.parentElement.parentElement;
   const commentId = dataDiv.dataset.id;
   const videoId = videoContainer.dataset.id;
@@ -91,6 +95,8 @@ const handleDelete = async (event) => {
 
   if (response.status === 201) {
     dataDiv.parentElement.remove();
+  } else {
+    event.target.addEventListener("click", handleDelete);
   }
 };
 

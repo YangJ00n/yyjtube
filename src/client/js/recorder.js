@@ -99,9 +99,11 @@ const handleStart = async () => {
   window.addEventListener("beforeunload", handleBeforeunload);
   micBtn.classList.add("none");
   actionBtn.innerText = "Stop Recording";
+  actionBtn.disabled = true;
   actionBtn.removeEventListener("click", handleStart);
   setTimeout(() => {
     actionBtn.addEventListener("click", handleStop);
+    actionBtn.disabled = false;
   }, 1500);
 
   recorder = new MediaRecorder(stream);

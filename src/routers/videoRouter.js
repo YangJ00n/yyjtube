@@ -8,7 +8,7 @@ import {
   deleteVideo,
   seeHashtag,
 } from "../controllers/videoController";
-import { protectorMiddleware, videoUpload } from "../middlewares";
+import { protectorMiddleware, videoUpload, s3DeleteFile } from "../middlewares";
 
 const videoRouter = express.Router();
 
@@ -27,6 +27,7 @@ videoRouter
   .all(protectorMiddleware)
   .get(getUpload)
   .post(
+    s3DeleteFile,
     videoUpload.fields([
       { name: "video", maxCount: 1 },
       { name: "thumb", maxCount: 1 },

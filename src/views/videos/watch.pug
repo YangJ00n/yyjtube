@@ -60,7 +60,7 @@ block content
                 if String(video.owner._id) === String(loggedInUser._id)
                     a.video__edit(href=`${video.id}/edit`)
                         span Edit Video &rarr;
-                    a.video__delete(href=`${video.id}/delete`)
+                    a.video__delete#deleteVideo(href=`${video.id}/delete`)
                         span Delete Video &rarr;
 
         div

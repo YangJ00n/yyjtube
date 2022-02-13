@@ -13,6 +13,7 @@ const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 const playbackRate = document.getElementById("playbackRate");
 const textarea = document.querySelector("textarea");
+const deleteBtn = document.getElementById("deleteVideo");
 
 let controlsTimeout = null;
 let isVideoPausedBefore; // is video paused before timeline change.
@@ -198,6 +199,15 @@ const setVolume = () => {
   video.volume = volume ? volume : 0.5;
 };
 
+const handleDeleteVideo = () => {
+  const href = deleteBtn.href;
+  if (href) {
+    deleteBtn.removeAttribute("href");
+    deleteBtn.innerText = "Deleting now...";
+    window.location = href;
+  }
+};
+
 setVolume();
 
 video.addEventListener("play", handlePlay);
@@ -218,6 +228,7 @@ video.addEventListener("dblclick", handleFullscreen);
 videoControls.addEventListener("mouseenter", handleMouseEnterControls);
 window.addEventListener("keydown", handleKeydown);
 playbackRate.addEventListener("change", handlePlaybackRate);
+deleteBtn.addEventListener("click", handleDeleteVideo);
 
 if (video.readyState === 4) {
   handleLoadedMetadata();
