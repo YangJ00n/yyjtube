@@ -6,7 +6,7 @@ block content
         div.video__main
             div#videoContainer(data-id=video._id)
                 if isHeroku
-                    video(src=video.fileUrl) 
+                    video(src=video.fileUrl, poster=video.thumbUrl) 
                 else 
                     video(src="/" + video.fileUrl) 
                 div#videoControls.videoControls.showing

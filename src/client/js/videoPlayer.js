@@ -228,8 +228,8 @@ video.addEventListener("dblclick", handleFullscreen);
 videoControls.addEventListener("mouseenter", handleMouseEnterControls);
 window.addEventListener("keydown", handleKeydown);
 playbackRate.addEventListener("change", handlePlaybackRate);
-deleteBtn.addEventListener("click", handleDeleteVideo);
+if (deleteBtn) deleteBtn.addEventListener("click", handleDeleteVideo);
 
-if (video.readyState === 4) {
+if (video.readyState == 4) {
   handleLoadedMetadata();
 }

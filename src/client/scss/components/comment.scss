@@ -18,6 +18,9 @@
   .comment-mixin__meta {
     margin-bottom: 10px;
     font-size: 11px;
+    div {
+      opacity: 0.7;
+    }
     .comment-mixin__name {
       display: block;
       margin-bottom: 1px;

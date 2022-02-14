@@ -4,7 +4,7 @@
 }
 .video-grid {
   display: grid;
-  gap: 30px;
+  gap: 20px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .auth-switch {

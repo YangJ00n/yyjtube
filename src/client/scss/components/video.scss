@@ -13,15 +13,18 @@
   }
   .video-mixin__data {
     background-color: $header_bg;
-    padding: 10px;
+    padding: 10px 5px;
     display: flex;
+    align-items: center;
+    height: 50px;
     .video-mixin__title {
-      font-size: 18px;
+      font-size: 14px;
       word-break: break-all;
     }
     .video-mixin__meta {
       margin-top: 5px;
       font-size: 12px;
+      opacity: 0.6;
       span {
         word-break: break-all;
       }
