@@ -6,8 +6,17 @@ header {
   align-items: center;
   height: 30px;
   .header__logo {
-    color: $main;
-    font-size: 38px;
+    display: flex;
+    align-items: center;
+    img {
+      width: 50px;
+    }
+    span {
+      color: white;
+      padding-left: 5px;
+      font-size: 25px;
+      font-weight: bold;
+    }
   }
   ul {
     display: flex;

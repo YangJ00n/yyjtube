@@ -1,7 +1,7 @@
 import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
-import s3 from "../s3";
+import { s3DeleteVideo } from "../s3";
 import { isHeroku } from "../middlewares";
 
 export const getElapsedTime = (createdAt, now) => {
@@ -143,19 +143,6 @@ export const postUpload = async (req, res) => {
       .status(400)
       .render("videos/upload", { pageTitle: "Upload Video" });
   }
-};
-
-const s3DeleteVideo = (fileName) => {
-  s3.deleteObject(
-    {
-      Bucket: "yyjtube",
-      Key: `videos/${fileName}`,
-    },
-    (error, data) => {
-      if (error) throw error;
-      console.log("s3 deleteVideo", data);
-    }
-  );
 };
 
 export const deleteVideo = async (req, res) => {

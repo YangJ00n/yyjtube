@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   avatarUrl: {
     type: String,
     default: isHeroku
-      ? "https://yyjtube.s3.ap-northeast-2.amazonaws.com/defaults/c3fda243131f1989c64da495084efd2b"
+      ? "/images/default-avatar.jpeg"
       : "uploads/default-avatar.jpeg",
   },
   socialOnly: { type: Boolean, default: false },

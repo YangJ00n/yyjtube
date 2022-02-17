@@ -21,4 +21,17 @@ export const s3VideoUploader = multerS3({
   contentType: multerS3.AUTO_CONTENT_TYPE,
 });
 
+export const s3DeleteVideo = (fileName) => {
+  s3.deleteObject(
+    {
+      Bucket: "yyjtube",
+      Key: `videos/${fileName}`,
+    },
+    (error, data) => {
+      if (error) throw error;
+      console.log("s3 deleteVideo", data);
+    }
+  );
+};
+
 export default s3;

@@ -41,6 +41,7 @@ app.use(
   express.static("assets"),
   express.static("node_modules/@ffmpeg/core/dist")
 );
+app.use("/images", express.static("src/images"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
