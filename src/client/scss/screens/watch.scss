@@ -41,6 +41,7 @@
     margin-right: 10px;
   }
   .video__owner {
+    width: fit-content;
     margin-top: 40px;
     margin-bottom: 5px;
     font-size: 20px;
@@ -49,9 +50,12 @@
   }
   .video__edit,
   .video__delete {
-    width: 150px;
-    margin-top: 15px;
+    width: fit-content;
+    margin-top: 20px;
     font-size: 14px;
+    color: $main;
+    font-weight: bold;
+    cursor: pointer;
   }
   .video__description {
     margin-top: 10px;

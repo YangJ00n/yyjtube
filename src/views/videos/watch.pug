@@ -2,13 +2,13 @@ extends ../base
 include ../mixins/comment
 
 block content
-    div.main__watch
+    div.main__watch#mainWatch
         div
             div#videoContainer(data-id=video._id)
                 if isHeroku
-                    video(src=video.fileUrl, poster=video.thumbUrl) 
+                    video(src=video.fileUrl, poster=video.thumbUrl, autoplay) 
                 else 
-                    video(src="/" + video.fileUrl) 
+                    video(src="/" + video.fileUrl, autoplay) 
                 div#videoControls.videoControls.showing
                     div.videoControls__top
                         input(type="range",step="0.01", value="0", min="0")#timeline.videoControls__timeline
@@ -60,8 +60,7 @@ block content
                 if String(video.owner._id) === String(loggedInUser._id)
                     a.video__edit(href=`${video.id}/edit`)
                         span Edit Video &rarr;
-                    a.video__delete#deleteVideo(href=`${video.id}/delete`)
-                        span Delete Video &rarr;
+                    span.video__delete#deleteVideo Delete Video &rarr;
 
         div
             div.video__comments
@@ -82,6 +81,7 @@ block content
 
 block scripts 
     script(src="/static/js/videoPlayer.js") 
+    script(src="/static/js/watch.js") 
     if loggedIn
         script(src="/static/js/commentSection.js") 
         script(src="/static/js/likeSection.js") 

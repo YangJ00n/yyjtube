@@ -13,11 +13,12 @@ const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 const playbackRate = document.getElementById("playbackRate");
 const textarea = document.querySelector("textarea");
-const deleteBtn = document.getElementById("deleteVideo");
 
 let controlsTimeout = null;
 let isVideoPausedBefore; // is video paused before timeline change.
 let isTimelineSetEnd = true;
+
+let coord;
 
 const handlePlay = () => {
   playBtnIcon.classList = "fas fa-pause";
@@ -128,7 +129,6 @@ const showControls = () => {
 };
 
 const hideControls = () => videoControls.classList.remove("showing");
-
 const hideControlsTimeout = () => {
   controlsTimeout = setTimeout(() => {
     hideControls();
@@ -199,13 +199,31 @@ const setVolume = () => {
   video.volume = volume ? volume : 0.5;
 };
 
-const handleDeleteVideo = () => {
-  const href = deleteBtn.href;
-  if (href) {
-    deleteBtn.removeAttribute("href");
-    deleteBtn.innerText = "Deleting now...";
-    window.location = href;
+const isMobile = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+};
+
+const handleMobileControls = (event) => {
+  if (!coord) {
+    coord = event.offsetX;
+  } else {
+    // 더블클릭
+    const videoWidth = video.offsetWidth;
+    const clickArea = videoWidth / 5;
+    if (coord <= clickArea * 2) {
+      // left
+      video.currentTime -= 10;
+    } else if (coord >= videoWidth - clickArea * 2) {
+      // right
+      video.currentTime += 10;
+    } else {
+      // middle
+      handlePlayClick();
+    }
   }
+  setTimeout(() => (coord = undefined), 300);
 };
 
 setVolume();
@@ -215,7 +233,6 @@ video.addEventListener("pause", handlePause);
 video.addEventListener("volumechange", handleVolume);
 
 playBtn.addEventListener("click", handlePlayClick);
-video.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
@@ -224,11 +241,16 @@ video.addEventListener("ended", handleEnded);
 timeline.addEventListener("input", handleTimelineChange);
 timeline.addEventListener("change", handleTimelineSet);
 fullScreenBtn.addEventListener("click", handleFullscreen);
-video.addEventListener("dblclick", handleFullscreen);
 videoControls.addEventListener("mouseenter", handleMouseEnterControls);
 window.addEventListener("keydown", handleKeydown);
 playbackRate.addEventListener("change", handlePlaybackRate);
-if (deleteBtn) deleteBtn.addEventListener("click", handleDeleteVideo);
+
+if (isMobile()) {
+  video.addEventListener("click", handleMobileControls);
+} else {
+  video.addEventListener("click", handlePlayClick);
+  video.addEventListener("dblclick", handleFullscreen);
+}
 
 if (video.readyState == 4) {
   handleLoadedMetadata();

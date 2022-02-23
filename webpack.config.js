@@ -12,6 +12,7 @@ module.exports = {
     socialLogin: BASE_JS + "socialLogin.js",
     likeSection: BASE_JS + "likeSection.js",
     form: BASE_JS + "form.js",
+    watch: BASE_JS + "watch.js",
   },
   plugins: [
     new MiniCssExtractPlugin({

@@ -12,11 +12,11 @@ block content
             small Created At #{new Date(user.createdAt).toLocaleString("ko-kr")}
             if loggedIn
                 ul 
-                    li.profile__routers.none
+                    li.profile__routers
                         a(href="/videos/upload") Upload Video
-                    li.profile__routers.none
+                    li.profile__routers
                         a(href="/users/edit") Edit Profile
-                    li.profile__routers.none
+                    li.profile__routers
                         a(href="/users/logout")  Log Out
         div.profile__videos
             h1 

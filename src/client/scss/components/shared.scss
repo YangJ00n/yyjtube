@@ -97,7 +97,6 @@
     .videoControls {
       height: 60px !important;
       gap: 0 !important;
-      padding-bottom: 0 !important;
     }
     .videoControls__top {
       grid-template-columns: 5fr 1fr !important;
@@ -118,7 +117,7 @@
     display: none;
   }
   .profile__routers {
-    display: block;
+    display: block !important;
   }
 }
 @media (max-width: 685px) {
@@ -135,6 +134,10 @@
   }
 }
 @media (max-width: 630px) {
+  .video__data,
+  .video__comments {
+    padding: 0 20px !important;
+  }
   .video-mixin .video-mixin__thumb {
     height: 200px;
   }

@@ -66,9 +66,7 @@ input[type="submit"] {
 
 input[type="submit"],
 .social__btn,
-.video__comment-btn,
-.video__edit,
-.video__delete {
+.video__comment-btn {
   border-radius: 5px;
   padding: 12px 20px !important;
   background-color: white !important;
@@ -98,6 +96,10 @@ i {
 
 .none {
   display: none;
+}
+
+.no-margin {
+  margin: 0 !important;
 }
 
 @keyframes goAway {
