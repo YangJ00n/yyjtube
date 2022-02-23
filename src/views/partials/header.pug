@@ -9,11 +9,11 @@ header
                     i.fas.fa-search
             //- pug파일에서 res.locas에 접근할 수 있다.
             if loggedIn
-                li
+                li.header__routers
                     a(href="/videos/upload") Upload Video
-                li
+                li.header__routers
                     a(href="/users/edit") Edit Profile
-                li
+                li.header__routers
                     a(href="/users/logout")  Log Out
                 li
                     a(href=`/users/${loggedInUser._id}`)

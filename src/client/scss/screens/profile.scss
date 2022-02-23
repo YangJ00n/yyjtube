@@ -16,6 +16,18 @@
     font-size: 12px;
     margin-top: 10px;
   }
+  ul {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    li {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
 }
 
 .profile__videos {

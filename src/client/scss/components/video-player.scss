@@ -32,7 +32,7 @@
     gap: 10px;
     background: linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0),
+      rgba(0, 0, 0, 0),
       rgba(0, 0, 0, 0.8)
     );
     padding: 10px;
@@ -49,6 +49,7 @@
       display: grid;
       grid-template-columns: 1fr 3fr 8fr 1fr 1fr;
       gap: 10px;
+      align-items: center;
       .videoControls__play,
       .videoControls__fullScreen,
       .videoControls__volume span {
@@ -88,11 +89,8 @@
       cursor: pointer;
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
-        width: 7px;
-        height: 7px;
-        background: $main;
-        cursor: pointer;
-        box-shadow: -407px 0 0 400px $main;
+        width: 0px;
+        box-shadow: -400px 0 0 400px $main;
       }
     }
   }

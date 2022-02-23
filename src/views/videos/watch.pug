@@ -2,8 +2,8 @@ extends ../base
 include ../mixins/comment
 
 block content
-    div.video__container
-        div.video__main
+    div.main__watch
+        div
             div#videoContainer(data-id=video._id)
                 if isHeroku
                     video(src=video.fileUrl, poster=video.thumbUrl) 
