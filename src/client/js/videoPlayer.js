@@ -19,6 +19,7 @@ let isVideoPausedBefore; // is video paused before timeline change.
 let isTimelineSetEnd = true;
 
 let coord;
+let coordTimeout = null;
 
 const handlePlay = () => {
   playBtnIcon.classList = "fas fa-pause";
@@ -206,6 +207,11 @@ const isMobile = () => {
 };
 
 const handleMobileControls = (event) => {
+  if (coordTimeout) {
+    clearTimeout(coordTimeout);
+    coordTimeout = null;
+  }
+
   if (!coord) {
     coord = event.offsetX;
   } else {
@@ -220,10 +226,10 @@ const handleMobileControls = (event) => {
       video.currentTime += 10;
     } else {
       // middle
-      handlePlayClick();
+      handleFullscreen();
     }
   }
-  setTimeout(() => (coord = undefined), 300);
+  coordTimeout = setTimeout(() => (coord = undefined), 300);
 };
 
 setVolume();
@@ -233,6 +239,7 @@ video.addEventListener("pause", handlePause);
 video.addEventListener("volumechange", handleVolume);
 
 playBtn.addEventListener("click", handlePlayClick);
+video.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
@@ -248,7 +255,6 @@ playbackRate.addEventListener("change", handlePlaybackRate);
 if (isMobile()) {
   video.addEventListener("click", handleMobileControls);
 } else {
-  video.addEventListener("click", handlePlayClick);
   video.addEventListener("dblclick", handleFullscreen);
 }
 

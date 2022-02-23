@@ -10,7 +10,7 @@ block content
                 img.avatar(src="/" + user.avatarUrl)
             h3=user.name
             small Created At #{new Date(user.createdAt).toLocaleString("ko-kr")}
-            if loggedIn
+            if loggedInUser._id === user.id
                 ul 
                     li.profile__routers
                         a(href="/videos/upload") Upload Video

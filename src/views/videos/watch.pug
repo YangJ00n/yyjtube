@@ -6,9 +6,9 @@ block content
         div
             div#videoContainer(data-id=video._id)
                 if isHeroku
-                    video(src=video.fileUrl, poster=video.thumbUrl, autoplay) 
+                    video(src=video.fileUrl, poster=video.thumbUrl) 
                 else 
-                    video(src="/" + video.fileUrl, autoplay) 
+                    video(src="/" + video.fileUrl) 
                 div#videoControls.videoControls.showing
                     div.videoControls__top
                         input(type="range",step="0.01", value="0", min="0")#timeline.videoControls__timeline
@@ -80,8 +80,8 @@ block content
 
 
 block scripts 
-    script(src="/static/js/videoPlayer.js") 
     script(src="/static/js/watch.js") 
+    script(src="/static/js/videoPlayer.js") 
     if loggedIn
         script(src="/static/js/commentSection.js") 
         script(src="/static/js/likeSection.js") 
