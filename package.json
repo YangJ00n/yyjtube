@@ -47,7 +47,7 @@
     "babel-loader": "^8.2.3",
     "css-loader": "^6.5.1",
     "mini-css-extract-plugin": "^2.5.3",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.21",
     "sass": "^1.49.0",
     "sass-loader": "^12.4.0",
     "style-loader": "^3.3.1",
